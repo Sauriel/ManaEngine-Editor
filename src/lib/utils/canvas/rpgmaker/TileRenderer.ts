@@ -27,13 +27,15 @@ export function createAutoTiles(
     tileSize?: number
   ) => TileRenderer
 ): TileRendererConfig[] {
+  const fileName = image.src.split("/").pop()!.split(".").shift();
   const renderer: TileRendererConfig[] = [];
   let position = 1;
   Object.entries(positions).forEach(([y, xs]) => {
     xs.forEach((x) => {
       const pos = position++;
       renderer.push({
-        key: `${type}-${pos}`,
+        key: `${fileName}-${pos}`,
+        auto: true,
         type: type,
         position: pos,
         renderer: createRenderer(image, x, Number(y)),
@@ -50,13 +52,15 @@ export function createSingleTiles(
   type: TileType,
   xOffset: number = 0
 ): TileRendererConfig[] {
+  const fileName = image.src.split("/").pop()!.split(".").shift();
   const renderer: TileRendererConfig[] = [];
   let position = 1;
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
       const pos = position++;
       renderer.push({
-        key: `${type}-${pos}`,
+        key: `${fileName}-${xOffset + pos}`,
+        auto: false,
         type: type,
         position: pos,
         renderer: new SimpleTileRenderer(image, x * 48 + xOffset, y * 48),

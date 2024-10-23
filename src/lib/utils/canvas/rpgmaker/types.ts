@@ -10,6 +10,7 @@ export type TileType = "a1" | "a2" | "a3" | "a4" | "a5" | "b" | "c" | "d" | "e";
 
 export type TileRendererConfig = {
   key: string;
+  auto: boolean;
   type: TileType;
   position: number;
   renderer: TileRenderer;

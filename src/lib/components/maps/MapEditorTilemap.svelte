@@ -21,8 +21,10 @@
 
 <script lang="ts">
   import { gameloop } from "$lib/stores/gameloop";
+  import selectedTiles from "$lib/stores/selectedTilesStore";
   import tilemap from "$lib/stores/tilemapStore";
   import { drawCheckerBg } from "$lib/utils/canvas/checkerBg";
+  import type { TileRendererConfig } from "$lib/utils/canvas/rpgmaker/types";
   import { type MousePosition } from "$lib/utils/canvas/types";
   import { onDestroy, onMount } from "svelte";
 
@@ -32,7 +34,6 @@
 
   const tileSize = $state<number>(48);
   const tilemapWidth = $state<number>(8);
-  let selectedTiles = $state<string[]>([]);
   let mouseDownPosition = $state<MousePosition | null>(null);
 
   const width = $derived<number>(tilemapWidth * tileSize);
@@ -97,13 +98,9 @@
     };
   }
 
-  function findTileKey(position: MousePosition): string | null {
+  function findTile(position: MousePosition): TileRendererConfig | null {
     const index = position.y * tilemapWidth + position.x;
-    const tile = $tilemap[index];
-    if (!tile) {
-      return null;
-    }
-    return tile.key;
+    return index < $tilemap.length ? $tilemap[index] : null;
   }
 
   function getAllPointsInArea(
@@ -127,25 +124,25 @@
   }
 
   function selectTiles(position: MousePosition) {
-    selectedTiles = [];
+    selectedTiles.set([]);
     getAllPointsInArea(mouseDownPosition!, position)
-      .map(findTileKey)
-      .forEach((key) => {
-        if (key && !selectedTiles.includes(key)) {
-          selectedTiles.push(key);
+      .map(findTile)
+      .forEach((tile) => {
+        if (tile && !selectedTiles.includes(tile.key)) {
+          selectedTiles.push(tile.key);
         }
       });
   }
 
   function onTileSelectionStart(event: MouseEvent) {
     const position = getPosition(event);
-    const key = findTileKey(position);
+    const tile = findTile(position);
     const isLastSelected =
-      selectedTiles.length === 1 && selectedTiles[0] === key;
-    selectedTiles = [];
+      tile && selectedTiles.length() === 1 && selectedTiles.equals(0, tile.key);
+    selectedTiles.set([]);
     if (!isLastSelected) {
-      if (key) {
-        selectedTiles.push(key);
+      if (tile) {
+        selectedTiles.push(tile.key);
       }
       mouseDownPosition = position;
     }
@@ -154,7 +151,12 @@
   function onTileSelectionMove(event: MouseEvent) {
     if (mouseDownPosition) {
       const position = getPosition(event);
-      selectTiles(position);
+      const tile = findTile(position);
+      if (tile && tile.auto) {
+        mouseDownPosition = null;
+      } else {
+        selectTiles(position);
+      }
     }
   }
 
