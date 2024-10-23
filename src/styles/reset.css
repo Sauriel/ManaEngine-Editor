@@ -1,0 +1,38 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  overflow: hidden;
+  font-family: "Open Sans Variable", sans-serif;
+  font-size: 16px;
+}
+
+body {
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input,
+textarea,
+button {
+  font: inherit;
+  color: inherit;
+}
+
+dialog {
+  padding: 0;
+  border: none;
+  background-color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+}

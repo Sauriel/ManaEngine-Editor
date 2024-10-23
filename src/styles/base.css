@@ -1,0 +1,14 @@
+@import url("variables.css");
+@import url("reset.css");
+
+*::-webkit-scrollbar {
+  background-color: var(--color-front--darker);
+  width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
+  border-radius: 100000px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--color-back--lighter);
+  border-radius: 100000px;
+}
