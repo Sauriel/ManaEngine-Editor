@@ -52,28 +52,92 @@ function getTileWithConfig(
   if (!key) {
     return null;
   }
-  const context: TileWithNeighbors = {
-    topLeft: getTileKey(tiles, x - 1, y - 1),
-    top: getTileKey(tiles, x, y - 1),
-    topRight: getTileKey(tiles, x + 1, y - 1),
-    left: getTileKey(tiles, x - 1, y),
-    center: key,
-    right: getTileKey(tiles, x + 1, y),
-    bottomLeft: getTileKey(tiles, x - 1, y + 1),
-    bottom: getTileKey(tiles, x, y + 1),
-    bottomRight: getTileKey(tiles, x + 1, y + 1),
-  };
+  const context = createTileContext(tiles, x, y);
   return {
     key,
     config: createAutoTileConfig(context),
   };
 }
 
+function createTileContext(
+  tiles: TileName[][],
+  x: number,
+  y: number
+): TileWithNeighbors {
+  return {
+    topLeft: getTileKey(tiles, x - 1, y - 1),
+    top: getTileKey(tiles, x, y - 1),
+    topRight: getTileKey(tiles, x + 1, y - 1),
+    left: getTileKey(tiles, x - 1, y),
+    center: getTileKey(tiles, x, y),
+    right: getTileKey(tiles, x + 1, y),
+    bottomLeft: getTileKey(tiles, x - 1, y + 1),
+    bottom: getTileKey(tiles, x, y + 1),
+    bottomRight: getTileKey(tiles, x + 1, y + 1),
+  };
+}
+
 function getTileKey(tiles: TileName[][], x: number, y: number): TileName {
-  if (y > 0 && x > 0 && y < tiles.length && x < tiles[y].length) {
+  if (y >= 0 && x >= 0 && y < tiles.length && x < tiles[y].length) {
     return tiles[y][x];
   }
   return null;
+}
+
+function fill(layer: number, position: MousePosition, tiles: string[]) {
+  mapStore.update((state) => {
+    const map = cloneDeep(state);
+    const currentTile = getTileKey(
+      map.layers[layer].tiles,
+      position.x,
+      position.y
+    );
+    floodFill(
+      map.layers[layer].tiles,
+      position.x,
+      position.y,
+      tiles[0],
+      currentTile
+    );
+    return map;
+  });
+}
+
+function floodFill(
+  grid: TileName[][],
+  x: number,
+  y: number,
+  fillValue: TileName,
+  targetValue: TileName
+) {
+  // Checke, ob die Koordinaten innerhalb des Gitters liegen.
+  if (x < 0 || x >= grid[0].length || y < 0 || y >= grid.length) {
+    return;
+  }
+
+  // Wenn das aktuelle Feld nicht `null` ist, breche ab.
+  if (grid[y][x] !== targetValue) {
+    return;
+  }
+
+  // Fülle das aktuelle Feld mit dem angegebenen Wert.
+  grid[y][x] = fillValue;
+
+  // Rekursiver Aufruf für die vier benachbarten Felder (oben, unten, links, rechts).
+  floodFill(grid, x + 1, y, fillValue, targetValue); // rechts
+  floodFill(grid, x - 1, y, fillValue, targetValue); // links
+  floodFill(grid, x, y + 1, fillValue, targetValue); // unten
+  floodFill(grid, x, y - 1, fillValue, targetValue); // oben
+}
+
+function printDebug() {
+  const map = get(mapStore);
+  const debugInfo = map.layers.map((layer, index) =>
+    layer.tiles.map((col, y) =>
+      col.map((cell, x) => createTileContext(layer.tiles, x, y))
+    )
+  );
+  console.info(debugInfo);
 }
 
 const map = {
@@ -85,6 +149,8 @@ const map = {
   remove,
   getTile,
   getTileWithConfig,
+  fill,
+  printDebug,
 };
 
 export default map;

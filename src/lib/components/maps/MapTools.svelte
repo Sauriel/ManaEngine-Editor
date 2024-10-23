@@ -61,6 +61,12 @@
     align-items: center;
     gap: 0.25em;
     font-size: 1.5rem;
+    opacity: 0.2;
+    transition: all var(--transition);
+  }
+
+  ul:hover {
+    opacity: 1;
   }
 
   li {
@@ -68,7 +74,8 @@
     aspect-ratio: 1;
     border-radius: 50%;
     overflow: hidden;
-    transition: all 0.2s ease-in-out;
+    transition: all var(--transition);
+    box-shadow: 2px 2px 4px color-mix(in srgb, var(--color-dark), transparent 25%);
   }
 
   li.active {

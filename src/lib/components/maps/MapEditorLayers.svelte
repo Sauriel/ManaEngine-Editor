@@ -35,7 +35,7 @@
     border-top-left-radius: 0.5em;
     border-top-right-radius: 0.5em;
     color: var(--color-front--darker);
-    transition: all 0.2s ease-in-out;
+    transition: all var(--transition);
     display: flex;
     align-items: center;
     justify-content: center;

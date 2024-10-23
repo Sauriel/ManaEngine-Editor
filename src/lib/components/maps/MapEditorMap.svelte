@@ -82,7 +82,25 @@
     if (selectedTool !== "eraser") {
       const tiles = selectedTiles.get();
       if (tiles.length > 0) {
-        map.draw($activeLayerIndex, position, tiles);
+        switch (selectedTool) {
+          case "brush":
+            map.draw($activeLayerIndex, position, tiles);
+            break;
+          case "line":
+            map.printDebug();
+            break;
+          case "rect-fill":
+            break;
+          case "rect-border":
+            break;
+          case "circle-fill":
+            break;
+          case "circle-border":
+            break;
+          case "fill":
+            map.fill($activeLayerIndex, position, tiles);
+            break;
+        }
       }
     } else {
       map.remove($activeLayerIndex, position);
