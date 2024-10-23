@@ -18,4 +18,5 @@ export type Tool =
   | "rect-border"
   | "circle-fill"
   | "circle-border"
-  | "fill";
+  | "fill"
+  | "eraser";

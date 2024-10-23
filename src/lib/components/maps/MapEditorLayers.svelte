@@ -1,7 +1,7 @@
 <ul>
   {#each layers as layer, index (index)}
-    <li class:active={index === activeLayerIndex}>
-      <button onclick={() => (activeLayerIndex = index)}>
+    <li class:active={index === $activeLayerIndex}>
+      <button onclick={() => activeLayerIndex.set(index)}>
         <span class="move-handle">
           <Icon icon="fa6-solid:grip-vertical" />
         </span>
@@ -77,10 +77,9 @@
   import Icon from "@iconify/svelte";
   import map from "$lib/stores/mapStore";
   import type { ForgeMapLayer } from "$lib/utils/map/types";
+  import activeLayerIndex from "$lib/stores/layerStore";
 
   const layers = $derived<ForgeMapLayer[]>($map.layers);
-
-  let activeLayerIndex = $state<number>(0);
 
   function addLayer() {
     map.createLayer();

@@ -12,6 +12,7 @@ const selectedTiles = {
   length: () => get(selectedTilesStore).length,
   equals: (index: number, value: string) =>
     get(selectedTilesStore).at(index) === value,
+  get: () => get(selectedTilesStore),
 };
 
 export default selectedTiles;

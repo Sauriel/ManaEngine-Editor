@@ -37,6 +37,11 @@
       <Icon icon="ph:paint-bucket-fill" />
     </button>
   </li>
+  <li class:active={selected === "eraser"}>
+    <button aria-label="erase" onclick={() => onselect("eraser")}>
+      <Icon icon="bi:eraser-fill" />
+    </button>
+  </li>
 </ul>
 
 <style>
