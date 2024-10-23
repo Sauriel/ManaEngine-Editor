@@ -1,5 +1,12 @@
 <div id="map" style={`--tileSize: ${tileSize}px;`}>
-  <canvas bind:this={canvas} {width} {height} onclick={onCanvasClick}></canvas>
+  <canvas
+    bind:this={canvas}
+    {width}
+    {height}
+    onmousedown={onCanvasMouseDown}
+    onmousemove={onCanvasMouseMove}
+    onmouseup={onCanvasMouseUp}
+  ></canvas>
   <MapTools
     selected={selectedTool}
     onselect={(value) => (selectedTool = value)}
@@ -32,6 +39,7 @@
 
   const tileSize = $state<number>(48);
   let selectedTool = $state<Tool>("brush");
+  let mouseDownPosition = $state<MousePosition | null>(null);
 
   const width = $derived<number>($map.width * tileSize);
   const height = $derived<number>($map.height * tileSize);
@@ -77,33 +85,51 @@
     };
   }
 
-  function onCanvasClick(event: MouseEvent) {
+  function onCanvasMouseDown(event: MouseEvent) {
     const position = getPosition(event);
-    if (selectedTool !== "eraser") {
+    mouseDownPosition = position;
+    if (selectedTool === "brush") {
       const tiles = selectedTiles.get();
       if (tiles.length > 0) {
-        switch (selectedTool) {
-          case "brush":
-            map.draw($activeLayerIndex, position, tiles);
-            break;
-          case "line":
-            map.printDebug();
-            break;
-          case "rect-fill":
-            break;
-          case "rect-border":
-            break;
-          case "circle-fill":
-            break;
-          case "circle-border":
-            break;
-          case "fill":
-            map.fill($activeLayerIndex, position, tiles);
-            break;
-        }
+        map.draw($activeLayerIndex, position, tiles);
       }
-    } else {
+    } else if (selectedTool === "eraser") {
       map.remove($activeLayerIndex, position);
     }
+  }
+
+  function onCanvasMouseMove(event: MouseEvent) {
+    if (mouseDownPosition) {
+      const position = getPosition(event);
+      if (selectedTool === "brush") {
+        const tiles = selectedTiles.get();
+        if (tiles.length > 0) {
+          map.draw($activeLayerIndex, position, tiles);
+        }
+      } else if (selectedTool === "eraser") {
+        map.remove($activeLayerIndex, position);
+      }
+    }
+  }
+
+  function onCanvasMouseUp(event: MouseEvent) {
+    if (mouseDownPosition) {
+      const position = getPosition(event);
+      const tiles = selectedTiles.get();
+      switch (selectedTool) {
+        case "fill":
+          map.fill($activeLayerIndex, position, tiles);
+          break;
+        case "brush":
+        case "line":
+        case "rect-fill":
+        case "rect-border":
+        case "circle-fill":
+        case "circle-border":
+        case "eraser":
+          break;
+      }
+    }
+    mouseDownPosition = null;
   }
 </script>
