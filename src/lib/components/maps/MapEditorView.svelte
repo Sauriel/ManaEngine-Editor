@@ -17,7 +17,10 @@
 </style>
 
 <script lang="ts">
+  import { gameloop } from "$lib/stores/gameloop";
   import MapEditorLayers from "./MapEditorLayers.svelte";
   import MapEditorMap from "./MapEditorMap.svelte";
   import MapEditorTilemap from "./MapEditorTilemap.svelte";
+
+  gameloop.start();
 </script>

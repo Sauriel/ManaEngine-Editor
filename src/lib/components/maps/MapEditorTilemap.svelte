@@ -20,38 +20,34 @@
 </style>
 
 <script lang="ts">
+  import { gameloop } from "$lib/stores/gameloop";
+  import tilemap from "$lib/stores/tilemapStore";
   import { drawCheckerBg } from "$lib/utils/canvas/checkerBg";
-  import GameLoop from "$lib/utils/canvas/GameLoop";
-  import type { TileRendererConfig } from "$lib/utils/canvas/rpgmaker/types";
-  import { buildTilemap } from "$lib/utils/canvas/tilemap";
   import { type MousePosition } from "$lib/utils/canvas/types";
+  import { onDestroy, onMount } from "svelte";
 
   const activeBorderWidth = 4;
+  const GL_ID = "tilemap-renderer";
   let canvas: HTMLCanvasElement;
-  const gameloop = new GameLoop(30);
 
   const tileSize = $state<number>(48);
   const tilemapWidth = $state<number>(8);
-  let tilemap = $state<TileRendererConfig[]>([]);
   let selectedTiles = $state<string[]>([]);
   let mouseDownPosition = $state<MousePosition | null>(null);
 
   const width = $derived<number>(tilemapWidth * tileSize);
   const height = $derived<number>(
-    Math.ceil(tilemap.length / tilemapWidth) * tileSize
+    Math.ceil($tilemap.length / tilemapWidth) * tileSize
   );
 
-  buildTilemap().then(init);
+  onMount(() => {
+    gameloop.addLoopParticipant({
+      id: GL_ID,
+      render: redrawCanvas,
+    });
+  });
 
-  function init(tm: TileRendererConfig[]) {
-    tilemap = tm;
-    gameloop.addRenderCallback(redrawCanvas);
-    gameloop.start();
-  }
-
-  // $inspect(tilemap);
-
-  // $effect(redrawCanvas);
+  onDestroy(() => gameloop.removeLoopParticipant(GL_ID));
 
   function redrawCanvas() {
     if (canvas) {
@@ -62,8 +58,8 @@
         for (let x = 0; x < width; x += tileSize) {
           drawCheckerBg(ctx, tileSize, x, y);
 
-          if (tilemap.length > 0 && tilemapIndex < tilemap.length) {
-            const tile = tilemap[tilemapIndex++];
+          if ($tilemap.length > 0 && tilemapIndex < $tilemap.length) {
+            const tile = $tilemap[tilemapIndex++];
             tile.renderer.drawPreview(ctx, x, y);
 
             if (selectedTiles.includes(tile.key)) {
@@ -103,7 +99,7 @@
 
   function findTileKey(position: MousePosition): string | null {
     const index = position.y * tilemapWidth + position.x;
-    const tile = tilemap[index];
+    const tile = $tilemap[index];
     if (!tile) {
       return null;
     }
@@ -142,13 +138,17 @@
   }
 
   function onTileSelectionStart(event: MouseEvent) {
-    selectedTiles = [];
     const position = getPosition(event);
     const key = findTileKey(position);
-    if (key) {
-      selectedTiles.push(key);
+    const isLastSelected =
+      selectedTiles.length === 1 && selectedTiles[0] === key;
+    selectedTiles = [];
+    if (!isLastSelected) {
+      if (key) {
+        selectedTiles.push(key);
+      }
+      mouseDownPosition = position;
     }
-    mouseDownPosition = position;
   }
 
   function onTileSelectionMove(event: MouseEvent) {

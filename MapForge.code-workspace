@@ -1,10 +1,11 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {
-		"svelte.enable-ts-plugin": true
-	}
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "svelte.enable-ts-plugin": true,
+    "cSpell.words": ["gameloop"]
+  }
 }

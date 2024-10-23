@@ -1,10 +1,10 @@
 export default class GameLoop {
-  private fps: number;
-  private frameDuration: number;
+  private readonly fps: number;
+  private readonly frameDuration: number;
   private lastTime: number;
   private accumulatedTime: number;
   private animationFrameId: number | null = null;
-  private renderCallbacks: Array<() => void> = [];
+  private loopParticipants: GameLoopParticipant[] = [];
 
   constructor(fps: number) {
     this.fps = fps;
@@ -15,14 +15,13 @@ export default class GameLoop {
 
   private update(deltaTime: number): void {
     // Hier kommt die Logik deines Spiels hin (z.B. Bewegung, Kollisionsabfragen)
-    console.log(`Updating game logic with deltaTime: ${deltaTime}ms`);
+    // console.log(`Updating game logic with deltaTime: ${deltaTime}ms`);
+    this.loopParticipants.forEach((p) => p.update && p.update());
   }
 
   private render(): void {
     // Alle registrierten Render-Funktionen aufrufen
-    for (const callback of this.renderCallbacks) {
-      callback();
-    }
+    this.loopParticipants.forEach((p) => p.render && p.render());
   }
 
   private loop = (currentTime: number): void => {
@@ -48,6 +47,7 @@ export default class GameLoop {
     if (this.animationFrameId === null) {
       this.lastTime = 0;
       this.animationFrameId = requestAnimationFrame(this.loop);
+      console.info("Gameloop started");
     }
   }
 
@@ -55,15 +55,18 @@ export default class GameLoop {
     if (this.animationFrameId !== null) {
       cancelAnimationFrame(this.animationFrameId);
       this.animationFrameId = null;
+      console.info("Gameloop ended");
     }
   }
 
-  public addRenderCallback(callback: () => void): void {
-    this.renderCallbacks.push(callback);
+  public addLoopParticipant(participant: GameLoopParticipant): void {
+    if (!this.loopParticipants.find((p) => p.id === participant.id)) {
+      this.loopParticipants.push(participant);
+    }
   }
 
-  public removeRenderCallback(callback: () => void): void {
-    this.renderCallbacks = this.renderCallbacks.filter((cb) => cb !== callback);
+  public removeLoopParticipant(id: string): void {
+    this.loopParticipants = this.loopParticipants.filter((p) => p.id !== id);
   }
 
   // Die isRunning Methode
@@ -71,3 +74,9 @@ export default class GameLoop {
     return this.animationFrameId !== null;
   }
 }
+
+export type GameLoopParticipant = {
+  id: string;
+  update?: () => void;
+  render?: () => void;
+};

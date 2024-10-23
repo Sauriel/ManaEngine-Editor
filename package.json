@@ -25,6 +25,8 @@
     "@sveltejs/kit": "^2.7.2",
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
     "@tauri-apps/cli": "^2",
+    "@types/lodash": "^4.17.12",
+    "lodash": "^4.17.21",
     "svelte": "^5.0.5",
     "svelte-check": "^4.0.5",
     "tslib": "^2.4.1",
