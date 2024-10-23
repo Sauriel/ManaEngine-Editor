@@ -75,19 +75,14 @@
 
 <script lang="ts">
   import Icon from "@iconify/svelte";
+  import map from "$lib/stores/mapStore";
+  import type { ForgeMapLayer } from "$lib/utils/map/types";
 
-  type MapLayer = {
-    label: string;
-  };
-
-  const layers = $state<MapLayer[]>([
-    { label: "Ebene 1" },
-    { label: "Ebene 2" },
-  ]);
+  const layers = $derived<ForgeMapLayer[]>($map.layers);
 
   let activeLayerIndex = $state<number>(0);
 
   function addLayer() {
-    layers.push({ label: `Ebene ${layers.length + 1}` });
+    map.createLayer();
   }
 </script>
