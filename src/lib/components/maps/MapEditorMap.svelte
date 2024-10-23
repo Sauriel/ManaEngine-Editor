@@ -53,11 +53,11 @@
         for (let x = 0; x < width; x += tileSize) {
           drawCheckerBg(ctx, tileSize, x, y);
           for (let layer = 0; layer < $map.layers.length; layer++) {
-            const tileKey = map.getTile(layer, toMousePosition(x, y));
-            if (tileKey) {
-              const tile = tilemap.find(tileKey);
+            const twc = map.getTileWithConfig(layer, toMousePosition(x, y));
+            if (twc) {
+              const tile = tilemap.find(twc.key);
               if (tile) {
-                tile.renderer.drawPreview(ctx, x, y);
+                tile.renderer.draw(ctx, x, y, twc.config);
               }
             }
           }

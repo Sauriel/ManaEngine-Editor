@@ -30,9 +30,9 @@ export default class SimpleSemiAutoTileRenderer implements TileRenderer {
     config: AutoTileConfig
   ) {
     this.drawTopLeft(ctx, x, y, config.topLeft);
-    this.drawTopRight(ctx, x + this.hts, y, config.topLeft);
-    this.drawBottomRight(ctx, x + this.hts, y + this.hts, config.topLeft);
-    this.drawBottomLeft(ctx, x, y + this.hts, config.topLeft);
+    this.drawTopRight(ctx, x + this.hts, y, config.topRight);
+    this.drawBottomRight(ctx, x + this.hts, y + this.hts, config.bottomRight);
+    this.drawBottomLeft(ctx, x, y + this.hts, config.bottomLeft);
   }
 
   private drawTopLeft(
@@ -84,7 +84,7 @@ export default class SimpleSemiAutoTileRenderer implements TileRenderer {
         imageX = this.xStart + this.tileSize + this.hts;
         break;
       case "horizontal":
-        imageX = this.xStart + this.tileSize;
+        imageX = this.xStart + this.hts;
         break;
       case "vertical":
         imageX = this.xStart + this.tileSize + this.hts;

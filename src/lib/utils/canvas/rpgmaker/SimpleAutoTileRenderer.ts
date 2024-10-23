@@ -34,9 +34,9 @@ export default class SimpleAutoTileRenderer implements TileRenderer {
     config: AutoTileConfig
   ) {
     this.drawTopLeft(ctx, x, y, config.topLeft);
-    this.drawTopRight(ctx, x + this.hts, y, config.topLeft);
-    this.drawBottomRight(ctx, x + this.hts, y + this.hts, config.topLeft);
-    this.drawBottomLeft(ctx, x, y + this.hts, config.topLeft);
+    this.drawTopRight(ctx, x + this.hts, y, config.topRight);
+    this.drawBottomRight(ctx, x + this.hts, y + this.hts, config.bottomRight);
+    this.drawBottomLeft(ctx, x, y + this.hts, config.bottomLeft);
   }
 
   private drawTopLeft(
@@ -142,7 +142,7 @@ export default class SimpleAutoTileRenderer implements TileRenderer {
         imageY = this.yStart + 2 * this.tileSize + this.hts;
         break;
       case "vertical":
-        imageY = this.yStart + 2 * this.tileSize;
+        imageY = this.yStart + this.tileSize + this.hts;
         break;
       case "open":
         imageX = this.xStart + this.tileSize;
@@ -185,7 +185,7 @@ export default class SimpleAutoTileRenderer implements TileRenderer {
         break;
       case "vertical":
         imageX = this.xStart + this.tileSize + this.hts;
-        imageY = this.yStart + 2 * this.tileSize;
+        imageY = this.yStart + this.tileSize + this.hts;
         break;
       case "open":
         imageX = this.xStart + this.hts;
