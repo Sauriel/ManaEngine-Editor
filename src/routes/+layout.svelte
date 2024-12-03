@@ -15,7 +15,7 @@
         in:fly={{ y: -200, duration: 300, delay: 300 }}
         out:fly={{ y: 200, duration: 300 }}
       >
-        <slot />
+        {@render children?.()}
       </div>
     {/key}
   </main>
@@ -82,6 +82,12 @@
   import NavItem from "$lib/components/NavItem.svelte";
   import { fly } from "svelte/transition";
   import type { PageData } from "./$types";
+  import type { Snippet } from "svelte";
 
-  export let data: PageData;
+  interface Props {
+    data: PageData;
+    children?: Snippet;
+  }
+
+  let { data, children }: Props = $props();
 </script>

@@ -14,7 +14,7 @@
   </div>
   <p>Click on the Tauri, Vite, and SvelteKit logos to learn more.</p>
 
-  <form class="row" on:submit|preventDefault={greet}>
+  <form class="row" onsubmit={preventDefault(greet)}>
     <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
     <button type="submit">Greet</button>
   </form>
@@ -142,10 +142,12 @@
 </style>
 
 <script lang="ts">
+  import { preventDefault } from 'svelte/legacy';
+
   import { invoke } from "@tauri-apps/api/core";
 
-  let name = "";
-  let greetMsg = "";
+  let name = $state("");
+  let greetMsg = $state("");
 
   async function greet() {
     // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/

@@ -1,6 +1,6 @@
 <li>
   <a href={path} class:active={$page.url.pathname === path}>
-    <slot />
+    {@render children?.()}
   </a>
 </li>
 
@@ -34,6 +34,12 @@
 
 <script lang="ts">
   import { page } from "$app/stores";
+  import type { Snippet } from "svelte";
 
-  export let path: string;
+  interface Props {
+    path: string;
+    children?: Snippet;
+  }
+
+  let { path, children }: Props = $props();
 </script>
