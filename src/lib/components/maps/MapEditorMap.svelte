@@ -11,13 +11,14 @@
     selected={selectedTool}
     onselect={(value) => (selectedTool = value)}
   />
+  <MapEditorLayers />
 </div>
 
 <style>
   #map {
     grid-area: map;
     overflow: auto;
-    max-height: calc(100dvh - var(--header-size));
+    max-height: 100dvh;
     position: relative;
   }
 </style>
@@ -33,6 +34,7 @@
   import type { MousePosition } from "$lib/utils/canvas/types";
   import tilemap from "$lib/stores/tilemapStore";
   import activeLayerIndex from "$lib/stores/layerStore";
+  import MapEditorLayers from "./MapEditorLayers.svelte";
 
   const GL_ID = "map-renderer";
   let canvas: HTMLCanvasElement;

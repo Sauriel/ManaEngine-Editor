@@ -1,39 +1,64 @@
-<ul>
-  {#each layers as layer, index (index)}
-    <li class:active={index === $activeLayerIndex}>
-      <button onclick={() => activeLayerIndex.set(index)}>
-        <span class="move-handle">
-          <Icon icon="fa6-solid:grip-vertical" />
-        </span>
-        {layer.label}
+<section use:movable={{ handle: "header" }}>
+  <header><Icon icon="pajamas:drag" /> Layers</header>
+  <ul>
+    {#each layers as layer, index (index)}
+      <li class:active={index === $activeLayerIndex}>
+        <button onclick={() => activeLayerIndex.set(index)}>
+          <span class="move-handle">
+            <Icon icon="pajamas:drag-vertical" />
+          </span>
+          {layer.label}
+        </button>
+        <button class="delete-btn">
+          <Icon icon="pajamas:remove" />
+        </button>
+      </li>
+    {/each}
+    <li class="actions">
+      <button onclick={addLayer}>
+        <Icon icon="fa-solid:plus" />
       </button>
     </li>
-  {/each}
-  <li>
-    <button onclick={addLayer}>
-      <Icon icon="fa-solid:plus" />
-    </button>
-  </li>
-</ul>
+  </ul>
+</section>
 
 <style>
-  ul {
-    grid-area: layers;
+  section {
+    position: absolute;
+    top: 1rem;
+    left: 20rem;
+    background-color: color-mix(in srgb, var(--color-back), transparent 25%);
+    border: 1px solid var(--color-back--lighter);
+    border-radius: 8px;
+    overflow: hidden;
+    opacity: 0.2;
+    transition: all var(--transition);
+  }
+
+  section:hover {
+    opacity: 1;
+  }
+
+  header {
+    background-color: color-mix(in srgb, var(--color-back), transparent 25%);
+    padding: 0.25em 0.5em;
+    border-bottom: 1px solid var(--color-front--darker);
     display: flex;
+    align-items: center;
+    gap: 1ch;
+    cursor: move;
+    user-select: none;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
     margin: 0;
     padding: 0;
     list-style: none;
-    gap: 2px;
-    border-bottom: 1px solid var(--color-back--lighter);
-    padding: 0.5rem 1rem 0;
-    height: 2.5rem;
   }
 
   li {
-    border: 1px solid var(--color-back--lighter);
-    border-bottom: none;
-    border-top-left-radius: 0.5em;
-    border-top-right-radius: 0.5em;
     color: var(--color-front--darker);
     transition: all var(--transition);
     display: flex;
@@ -43,10 +68,7 @@
   }
 
   li.active {
-    color: var(--color-front);
-    border-top-color: var(--color-front--darker);
-    border-left-color: var(--color-front--darker);
-    border-right-color: var(--color-front--darker);
+    color: var(--color-front--lighter);
   }
 
   li:hover {
@@ -54,13 +76,25 @@
     color: var(--color-back);
   }
 
+  li:hover .delete-btn {
+    opacity: 1;
+  }
+
+  li.actions {
+    border-top: 1px solid var(--color-front--darker);
+  }
+
+  li:not(.actions) {
+    height: 2em;
+  }
+
   button {
     all: unset;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 1ch;
-    padding: 0.25em 1em;
+    padding: 0.25em 1em 0.25em 0.5em;
     cursor: pointer;
     height: 100%;
   }
@@ -71,6 +105,12 @@
     justify-content: center;
     cursor: move;
   }
+
+  .delete-btn {
+    opacity: 0;
+    transition: opacity var(--transition);
+    color: var(--color-primary);
+  }
 </style>
 
 <script lang="ts">
@@ -78,6 +118,7 @@
   import map from "$lib/stores/mapStore";
   import type { ForgeMapLayer } from "$lib/utils/map/types";
   import activeLayerIndex from "$lib/stores/layerStore";
+  import { movable } from "$lib/actions/movable";
 
   const layers = $derived<ForgeMapLayer[]>($map.layers);
 
