@@ -4,18 +4,21 @@
       <NavItem path="/">
         <Icon icon="fa6-solid:house" />
       </NavItem>
-      <NavItem path="/user">
+      <!-- <NavItem path="/user">
         <Icon icon="fa6-solid:user" />
+      </NavItem> -->
+      <NavItem path="/import">
+        <Icon icon="fa6-solid:file-import" />
       </NavItem>
     </ul>
   </nav>
   <main>
     {#key data.url}
       <div
-        in:fly={{ y: -200, duration: 300, delay: 300 }}
-        out:fly={{ y: 200, duration: 300 }}
+        in:fly={{ y: 200, duration: 300, delay: 300 }}
+        out:fly={{ y: -200, duration: 300 }}
       >
-        {@render children?.()}
+        {@render children()}
       </div>
     {/key}
   </main>
@@ -86,7 +89,7 @@
 
   interface Props {
     data: PageData;
-    children?: Snippet;
+    children: Snippet;
   }
 
   let { data, children }: Props = $props();

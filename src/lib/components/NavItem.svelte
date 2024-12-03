@@ -1,5 +1,9 @@
 <li>
-  <a href={path} class:active={$page.url.pathname === path}>
+  <a
+    href={path}
+    class={`orientation-${orientation}`}
+    class:active={$page.url.pathname === path}
+  >
     {@render children?.()}
   </a>
 </li>
@@ -9,12 +13,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    aspect-ratio: 1;
     text-decoration: none;
     color: var(--color-front);
     transition: all 0.4s ease-in-out;
     border-radius: 0.25rem;
+  }
+
+  li > a.orientation-vertical {
+    width: 100%;
+    aspect-ratio: 1;
+  }
+
+  li > a.orientation-horizontal {
+    padding: 0.5em 1em;
   }
 
   li > a:hover {
@@ -37,9 +48,10 @@
   import type { Snippet } from "svelte";
 
   interface Props {
+    orientation?: "horizontal" | "vertical";
     path: string;
     children?: Snippet;
   }
 
-  let { path, children }: Props = $props();
+  let { orientation = "vertical", path, children }: Props = $props();
 </script>
