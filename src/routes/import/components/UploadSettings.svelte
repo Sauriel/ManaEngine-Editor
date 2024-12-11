@@ -14,7 +14,17 @@
         />
       </label>
     {/each}
-    <button onclick={() => onRemove(tilemap)}>
+    <label class="warn" for={`tile-type-unknown____${index}`}>
+      <span><Icon icon="fa6-solid:question" /></span>
+      <input
+        id={`tile-type-unknown____${index}`}
+        type="radio"
+        name={`tilemap-type__${index}`}
+        value={null}
+        checked={tilemap.type === null}
+      />
+    </label>
+    <button class="danger" onclick={() => onRemove(tilemap)}>
       <Icon icon="fa6-solid:trash-can" />
     </button>
   </div>
@@ -46,7 +56,7 @@
     justify-content: center;
     align-items: center;
     background-color: var(--color-back--darker);
-    padding: 0.5em 1em;
+    padding: 0.75em 1em;
     cursor: pointer;
     transition:
       background 0.4s ease-in-out,
@@ -64,6 +74,15 @@
 
   label:has(input:checked):hover {
     background-color: var(--color-primary--lighter);
+  }
+
+  label.warn:has(input:checked) {
+    color: var(--color-back);
+    background-color: var(--color-warn);
+  }
+
+  label.warn:has(input:checked):hover {
+    background-color: var(--color-warn--lighter);
   }
 
   label:first-of-type {
@@ -85,6 +104,7 @@
   }
 
   label > input {
+    position: absolute;
     width: 0;
     height: 0;
     opacity: 0;
@@ -92,6 +112,7 @@
 
   span {
     white-space: nowrap;
+    line-height: 0;
   }
 
   button {
@@ -110,6 +131,14 @@
 
   button:hover {
     background-color: var(--color-primary--lighter);
+  }
+
+  button.danger {
+    background-color: var(--color-danger);
+  }
+
+  button.danger:hover {
+    background-color: var(--color-danger--lighter);
   }
 </style>
 

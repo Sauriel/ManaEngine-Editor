@@ -111,7 +111,8 @@
 
           const probableType = findProbableTilemapType(
             image.width,
-            image.height
+            image.height,
+            file.name
           );
 
           const tilemap: ImportedTilemap = {
@@ -131,11 +132,18 @@
 
   function findProbableTilemapType(
     width: number,
-    height: number
+    height: number,
+    name: string
   ): TileMapType | null {
     if (width === 768) {
       if (height === 576) {
-        return "A1 / A2";
+        if (name.toLowerCase().includes("a1")) {
+          return "A1";
+        } else if (name.toLowerCase().includes("a2")) {
+          return "A2";
+        } else {
+          return null;
+        }
       } else if (height === 384) {
         return "A3";
       } else if (height === 720) {

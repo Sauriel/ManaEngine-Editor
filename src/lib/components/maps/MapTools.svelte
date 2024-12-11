@@ -75,7 +75,8 @@
     border-radius: 50%;
     overflow: hidden;
     transition: all var(--transition);
-    box-shadow: 2px 2px 4px color-mix(in srgb, var(--color-dark), transparent 25%);
+    box-shadow: 2px 2px 4px
+      color-mix(in srgb, var(--color-back), transparent 25%);
   }
 
   li.active {
