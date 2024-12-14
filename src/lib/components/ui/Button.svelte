@@ -1,4 +1,4 @@
-<button {onclick} {disabled}>
+<button class={flavor} {onmousedown} {disabled}>
   {@render children()}
 </button>
 
@@ -7,9 +7,9 @@
     background-color: var(--color-front);
     color: var(--color-back);
     padding: 0.5em 1em;
-    border-radius: 0.75em;
-    border: 1px solid var(--color-front);
-    display: flex;
+    border-radius: 0.25em;
+    border: 1px solid var(--color-primary--darker);
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
@@ -18,15 +18,30 @@
       color 0.4s ease-in-out;
   }
 
-  button:disabled {
-    cursor: not-allowed;
+  button:hover {
     background-color: var(--color-front--darker);
-    color: var(--color-front--lighter);
+    color: var(--color-back--lighter);
   }
 
-  button:hover {
-    background-color: var(--color-back);
+  button.primary {
+    background-color: var(--color-primary);
     color: var(--color-front);
+  }
+
+  button.primary:hover {
+    background-color: var(--color-primary--lighter);
+    color: var(--color-front--darker);
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    background-color: var(--color-back--lighter);
+    color: var(--color-front--darker);
+    border-color: var(--color-front--darker);
+  }
+
+  button:disabled:hover {
+    background-color: var(--color-back--darker);
   }
 </style>
 
@@ -35,11 +50,17 @@
 
   interface Props {
     children: Snippet;
-    onclick: (
+    onmousedown: (
       event: MouseEvent & { currentTarget: EventTarget & HTMLButtonElement }
     ) => void;
     disabled?: boolean;
+    flavor?: "primary" | "secondary";
   }
 
-  let { children, onclick, disabled = false }: Props = $props();
+  let {
+    children,
+    onmousedown,
+    disabled = false,
+    flavor = "primary",
+  }: Props = $props();
 </script>

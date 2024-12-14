@@ -1,15 +1,11 @@
 <div id="app">
   <nav>
     <ul>
-      <NavItem path="/">
+      <NavItem path="/" orientation="horizontal">
         <Icon icon="fa6-solid:house" />
       </NavItem>
-      <!-- <NavItem path="/user">
-        <Icon icon="fa6-solid:user" />
-      </NavItem> -->
-      <NavItem path="/import">
-        <Icon icon="fa6-solid:file-import" />
-      </NavItem>
+      <Button onmousedown={showImportWindow}>Import</Button>
+      <Window config={importWindowConfig} bind:this={importWindow} />
     </ul>
   </nav>
   <main>
@@ -26,9 +22,6 @@
 
 <style>
   #app {
-    display: grid;
-    grid-template-areas: "menu content";
-    grid-template-columns: 50px auto;
     min-height: 100dvh;
   }
 
@@ -43,7 +36,6 @@
     padding: 0.5rem;
     list-style: none;
     display: flex;
-    flex-direction: column;
     gap: 0.5rem;
     height: 100%;
   }
@@ -86,11 +78,26 @@
   import { fly } from "svelte/transition";
   import type { PageData } from "./$types";
   import type { Snippet } from "svelte";
+  import Window from "$lib/components/ui/window/Window.svelte";
+  import UploadView from "./import/components/UploadView.svelte";
+  import type { WindowConfig } from "$lib/components/ui/window/types";
+  import Button from "$lib/components/ui/Button.svelte";
 
-  interface Props {
+  type Props = {
     data: PageData;
     children: Snippet;
-  }
+  };
 
   let { data, children }: Props = $props();
+
+  let importWindow = $state.raw<Window>();
+
+  const importWindowConfig: WindowConfig = {
+    title: "Import TileSets",
+    component: UploadView,
+  };
+
+  function showImportWindow() {
+    importWindow!.show();
+  }
 </script>

@@ -23,16 +23,16 @@ export async function buildTilemap(): Promise<TileRendererConfig[]> {
   const a4Renderer = await loadImage(TileMapA4).then(createA4Renderer);
   const a5Renderer = await loadImage(TileMapA5).then(createA5Renderer);
   const bRenderer = await loadImage(TileMapB).then((image) =>
-    createBCDERenderer(image, "b")
+    createBCDERenderer(image, "B")
   );
   const cRenderer = await loadImage(TileMapC).then((image) =>
-    createBCDERenderer(image, "c")
+    createBCDERenderer(image, "C")
   );
   const dRenderer = await loadImage(TileMapD).then((image) =>
-    createBCDERenderer(image, "d")
+    createBCDERenderer(image, "D")
   );
   const eRenderer = await loadImage(TileMapE).then((image) =>
-    createBCDERenderer(image, "e")
+    createBCDERenderer(image, "E")
   );
   return [
     ...a1Renderer,

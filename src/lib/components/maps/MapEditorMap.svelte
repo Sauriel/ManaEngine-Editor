@@ -32,7 +32,7 @@
   import { gameloop } from "$lib/stores/gameloop";
   import selectedTiles from "$lib/stores/selectedTilesStore";
   import type { MousePosition } from "$lib/utils/canvas/types";
-  import tilemap from "$lib/stores/tilemapStore";
+  import tilemapStore from "$lib/stores/tilemapStore";
   import activeLayerIndex from "$lib/stores/layerStore";
   import MapEditorLayers from "./MapEditorLayers.svelte";
 
@@ -65,7 +65,7 @@
           for (let layer = 0; layer < $map.layers.length; layer++) {
             const twc = map.getTileWithConfig(layer, toMousePosition(x, y));
             if (twc) {
-              const tile = tilemap.find(twc.key);
+              const tile = tilemapStore.find(twc.key);
               if (tile) {
                 tile.renderer.draw(ctx, x, y, twc.config);
               }

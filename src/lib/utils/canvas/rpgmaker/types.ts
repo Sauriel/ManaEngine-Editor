@@ -6,7 +6,19 @@ export type YPos = number;
 
 export type TilePositions = Record<YPos, XPos[]>;
 
-export type TileType = "a1" | "a2" | "a3" | "a4" | "a5" | "b" | "c" | "d" | "e";
+export const TILEMAP_TYPES = [
+  "A1",
+  "A2",
+  "A3",
+  "A4",
+  "A5",
+  "B",
+  "C",
+  "D",
+  "E",
+] as const;
+export type TileType = (typeof TILEMAP_TYPES)[number];
+// export type TileType = "a1" | "a2" | "a3" | "a4" | "a5" | "b" | "c" | "d" | "e";
 
 export type TileRendererConfig = {
   key: string;

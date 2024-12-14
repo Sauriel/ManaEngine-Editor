@@ -1,21 +1,21 @@
 const darkMode = true;
 
-const BORDER_COLOR = getComputedStyle(document.body).getPropertyValue(
-  "--color-back--darker"
-);
-const LIGHT_CHECKER_COLOR = getComputedStyle(document.body).getPropertyValue(
-  "--color-back--lighter"
-);
-const DARK_CHECKER_COLOR = getComputedStyle(document.body).getPropertyValue(
-  "--color-back"
-);
-
 export function drawCheckerBg(
   context: CanvasRenderingContext2D,
   tileSize: number,
   x1: number,
   y1: number
 ) {
+  const BORDER_COLOR = getComputedStyle(document.body).getPropertyValue(
+    "--color-back--darker"
+  );
+  const LIGHT_CHECKER_COLOR = getComputedStyle(document.body).getPropertyValue(
+    "--color-back--lighter"
+  );
+  const DARK_CHECKER_COLOR = getComputedStyle(document.body).getPropertyValue(
+    "--color-back"
+  );
+
   // grid checker bg
   const checkerFraction = 4;
   const checkerSize = tileSize / checkerFraction;

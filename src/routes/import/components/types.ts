@@ -1,9 +1,11 @@
-export const TILEMAP_TYPES = ["A1", "A2", "A3", "A4", "A5", "B-E"] as const;
-export type TileMapType = (typeof TILEMAP_TYPES)[number] | "custom";
+import type { TileType } from "$lib/utils/canvas/rpgmaker/types";
+
+export type TileMapType = TileType | "custom";
 
 export type ImportedTilemap = {
   filename: string;
   canvas: OffscreenCanvas;
+  image: HTMLImageElement;
   type: TileMapType | null;
 };
 
