@@ -8,19 +8,16 @@ export function movable(node: HTMLElement, params: MovableParams = {}) {
     : node;
 
   let isDragging = false;
-  let startX = 0;
-  let startY = 0;
-  let startMouseX = 0;
-  let startMouseY = 0;
 
   function onMouseDown(evt: Event) {
     const event = evt as MouseEvent;
     if (handle.isEqualNode(event.target! as Node)) {
       isDragging = true;
-      startX = node.getBoundingClientRect().x;
-      startY = node.getBoundingClientRect().y;
-      startMouseX = event.x;
-      startMouseY = event.y;
+
+      node.style.left = `${node.getBoundingClientRect().x}px`;
+      node.style.top = `${node.getBoundingClientRect().y}px`;
+      node.style.position = "fixed";
+      node.style.margin = "0";
 
       if (getComputedStyle(handle).cursor === "grab") {
         handle.style.cursor = "grabbing";
@@ -28,18 +25,17 @@ export function movable(node: HTMLElement, params: MovableParams = {}) {
         handle.style.cursor = "move";
       }
       node.style.userSelect = "none";
+
+      document.body.addEventListener("mousemove", onMouseMove);
+      document.body.addEventListener("mouseup", onMouseUp);
     }
   }
 
   function onMouseMove(evt: Event) {
     const event = evt as MouseEvent;
-    if (isDragging) {
-      const left = startX + (event.x - startMouseX);
-      const top = startY + (event.y - startMouseY);
-
-      node.style.margin = "0";
-      node.style.left = `${left}px`;
-      node.style.top = `${top}px`;
+    if (isDragging && !node.dataset.isResizing) {
+      node.style.left = `${node.getBoundingClientRect().x + event.movementX}px`;
+      node.style.top = `${node.getBoundingClientRect().y + event.movementY}px`;
     }
     event.stopPropagation();
   }
@@ -48,15 +44,16 @@ export function movable(node: HTMLElement, params: MovableParams = {}) {
     isDragging = false;
     handle.style.cursor = "";
     node.style.userSelect = "";
+
+    document.body.removeEventListener("mousemove", onMouseMove);
+    document.body.removeEventListener("mouseup", onMouseUp);
   }
 
   handle.addEventListener("mousedown", onMouseDown);
-  document.body.addEventListener("mousemove", onMouseMove);
-  document.body.addEventListener("mouseup", onMouseUp);
 
   return {
     update(newParams: MovableParams) {
-      //
+      // seems unlikely that the handler could be updated
     },
     destroy() {
       handle.removeEventListener("mousedown", onMouseDown);

@@ -1,4 +1,4 @@
-<dialog bind:this={dialog} use:movable={{ handle: "header" }}>
+<dialog bind:this={dialog} use:movable={{ handle: "header" }} use:resizable>
   <header>
     {config.title}
     <IconButton icon="fa6-solid:x" onmousedown={close} />
@@ -43,7 +43,6 @@
     font-size: 1.25em;
     background-color: var(--color-back--lighter);
     padding: 0.5em 1em;
-    cursor: grab;
   }
 
   section {
@@ -72,6 +71,7 @@
   import Button from "../Button.svelte";
   import type { SvelteComponent } from "svelte";
   import { movable } from "$lib/actions/movable";
+  import { resizable } from "$lib/actions/resizable";
 
   type ChildComponent = SvelteComponent<Record<string, never>, never, never> & {
     onSave: () => Promise<void>;
