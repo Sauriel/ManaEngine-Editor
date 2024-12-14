@@ -1,5 +1,11 @@
+export type ElementPosition = {
+  x: number;
+  y: number;
+};
+
 type MovableParams = {
   handle?: string;
+  onPositionChange?: (position: ElementPosition) => void;
 };
 
 export function movable(node: HTMLElement, params: MovableParams = {}) {
@@ -47,6 +53,11 @@ export function movable(node: HTMLElement, params: MovableParams = {}) {
 
     document.body.removeEventListener("mousemove", onMouseMove);
     document.body.removeEventListener("mouseup", onMouseUp);
+
+    params.onPositionChange?.({
+      x: node.getBoundingClientRect().x,
+      y: node.getBoundingClientRect().y,
+    });
   }
 
   handle.addEventListener("mousedown", onMouseDown);

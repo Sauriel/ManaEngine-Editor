@@ -1,29 +1,13 @@
-<section id="importer">
-  <header>
-    <FileUpload onUpload={processImages} />
-  </header>
-  <ul>
-    {#each tilemaps as tilemap, index (tilemap.filename)}
-      <UploadSettings {tilemap} {index} {onChanged} {onRemove} />
-    {/each}
-  </ul>
-</section>
+<ul>
+  <li>
+    <FileUpload fluid onUpload={processImages} />
+  </li>
+  {#each tilemaps as tilemap, index (tilemap.filename)}
+    <UploadSettings {tilemap} {index} {onChanged} {onRemove} />
+  {/each}
+</ul>
 
 <style>
-  #importer {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem;
-    /* max-height: 100vh;
-    overflow-y: auto; */
-  }
-
-  header {
-    display: flex;
-    gap: 1rem;
-  }
-
   ul {
     list-style: none;
     padding: 0;
@@ -31,6 +15,7 @@
     display: grid;
     gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(20vw, 1fr));
+    min-height: 100%;
   }
 </style>
 

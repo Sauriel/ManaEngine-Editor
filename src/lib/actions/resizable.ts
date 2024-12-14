@@ -1,3 +1,12 @@
+export type ElementSize = {
+  width: number;
+  height: number;
+};
+
+type ResizableParams = {
+  onSizeChange?: (size: ElementSize) => void;
+};
+
 type ResizeDirection =
   | "top"
   | "top-right"
@@ -10,7 +19,7 @@ type ResizeDirection =
 
 const RESIZE_ZONE_SIZE_PX = 20;
 
-export function resizable(node: HTMLElement) {
+export function resizable(node: HTMLElement, params: ResizableParams = {}) {
   let resizingDirection: ResizeDirection | null = null;
   let isResizing = false;
 
@@ -165,6 +174,10 @@ export function resizable(node: HTMLElement) {
       node.style.userSelect = "";
       document.body.removeEventListener("mousemove", onResizing);
       document.body.removeEventListener("mouseup", onMouseUp);
+      params.onSizeChange?.({
+        width: node.getBoundingClientRect().width,
+        height: node.getBoundingClientRect().height,
+      });
     }
   }
 

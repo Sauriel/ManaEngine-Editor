@@ -1,4 +1,9 @@
-<dialog bind:this={dialog} use:movable={{ handle: "header" }} use:resizable>
+<dialog
+  style={windowState}
+  bind:this={dialog}
+  use:movable={{ handle: "header", onPositionChange }}
+  use:resizable={{ onSizeChange }}
+>
   <header>
     {config.title}
     <IconButton icon="fa6-solid:x" onmousedown={close} />
@@ -66,12 +71,16 @@
 </style>
 
 <script lang="ts">
-  import type { WindowComponent, WindowConfig } from "./types";
+  import type {
+    PersistedWindowState,
+    WindowComponent,
+    WindowConfig,
+  } from "./types";
   import IconButton from "../IconButton.svelte";
   import Button from "../Button.svelte";
   import type { SvelteComponent } from "svelte";
-  import { movable } from "$lib/actions/movable";
-  import { resizable } from "$lib/actions/resizable";
+  import { movable, type ElementPosition } from "$lib/actions/movable";
+  import { resizable, type ElementSize } from "$lib/actions/resizable";
 
   type ChildComponent = SvelteComponent<Record<string, never>, never, never> & {
     onSave: () => Promise<void>;
@@ -84,12 +93,15 @@
 
   let { config }: Props = $props();
 
+  let windowState = $state<string | null>(null);
+
   let dialog = $state.raw<HTMLDialogElement>();
   let component = $state.raw<ChildComponent>();
 
   const ViewComponent = $derived<WindowComponent>(config.component);
 
   export function show() {
+    loadWindowState();
     dialog?.show();
   }
 
@@ -106,5 +118,43 @@
       component.onSave().then(() => dialog?.close());
     }
     dialog?.close();
+  }
+
+  function onPositionChange(position: ElementPosition) {
+    persistWindowState({ position });
+  }
+
+  function onSizeChange(size: ElementSize) {
+    persistWindowState({ size });
+  }
+
+  function loadWindowState() {
+    const stateKey = `window-state-${config.id}`;
+    const state = JSON.parse(
+      localStorage.getItem(stateKey) ?? "{}"
+    ) as PersistedWindowState;
+    const styles: string[] = [];
+    if (state.position) {
+      styles.push(`left: ${state.position.x}px;`);
+      styles.push(`top: ${state.position.y}px;`);
+    }
+    if (state.size) {
+      styles.push(`width: ${state.size.width}px;`);
+      styles.push(`height: ${state.size.height}px;`);
+    }
+    if (styles.length > 0) {
+      windowState = styles.join(" ");
+    }
+  }
+
+  function persistWindowState(state: PersistedWindowState) {
+    const stateKey = `window-state-${config.id}`;
+    const previousState = JSON.parse(
+      localStorage.getItem(stateKey) ?? "{}"
+    ) as PersistedWindowState;
+    localStorage.setItem(
+      stateKey,
+      JSON.stringify({ ...previousState, ...state })
+    );
   }
 </script>

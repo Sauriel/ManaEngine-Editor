@@ -1,6 +1,7 @@
 <label
   class="file-uploader"
   class:hover={isDragOver}
+  class:fluid
   for="file-upload"
   {ondragover}
   {ondragleave}
@@ -26,13 +27,20 @@
     align-items: center;
     gap: 0.2em;
     font-size: 10vh;
-    width: 25vw;
-    aspect-ratio: 4/3;
     border: 4px dashed var(--color-front);
     border-radius: 1vw;
     padding: 0.2em;
     cursor: pointer;
     transition: background 0.4s ease-in-out;
+  }
+
+  .file-uploader.fluid {
+    height: 100%;
+  }
+
+  .file-uploader:not(.fluid) {
+    width: 25vw;
+    aspect-ratio: 4/3;
   }
 
   .file-uploader:hover,
@@ -55,10 +63,11 @@
   import Icon from "@iconify/svelte";
 
   interface Props {
+    fluid?: boolean;
     onUpload: (files: FileList) => void;
   }
 
-  let { onUpload }: Props = $props();
+  let { onUpload, fluid = false }: Props = $props();
 
   let fileUpload = $state.raw<HTMLInputElement>();
 

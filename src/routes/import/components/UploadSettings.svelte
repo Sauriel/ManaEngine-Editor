@@ -56,7 +56,7 @@
     justify-content: center;
     align-items: center;
     background-color: var(--color-back--darker);
-    padding: 0.75em 1em;
+    padding: 0.25em 0.5em;
     cursor: pointer;
     transition:
       background 0.4s ease-in-out,
@@ -88,6 +88,7 @@
   label:first-of-type {
     border-top-left-radius: 1em;
     border-bottom-left-radius: 1em;
+    padding-left: 0.75em;
   }
 
   label:not(:first-of-type) {
@@ -97,6 +98,7 @@
   label:last-of-type {
     border-top-right-radius: 1em;
     border-bottom-right-radius: 1em;
+    padding-right: 0.75em;
   }
 
   label:not(:last-of-type) {

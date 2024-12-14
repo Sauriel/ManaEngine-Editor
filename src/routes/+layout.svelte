@@ -93,6 +93,7 @@
   let importWindow = $state.raw<Window>();
 
   const importWindowConfig: WindowConfig = {
+    id: "tilesets-import",
     title: "Import TileSets",
     component: UploadView,
   };
