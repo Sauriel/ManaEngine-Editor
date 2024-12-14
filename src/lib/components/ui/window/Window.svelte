@@ -1,4 +1,4 @@
-<dialog bind:this={dialog}>
+<dialog bind:this={dialog} use:movable={{ handle: "header" }}>
   <header>
     {config.title}
     <IconButton icon="fa6-solid:x" onmousedown={close} />
@@ -43,6 +43,7 @@
     font-size: 1.25em;
     background-color: var(--color-back--lighter);
     padding: 0.5em 1em;
+    cursor: grab;
   }
 
   section {
@@ -70,6 +71,7 @@
   import IconButton from "../IconButton.svelte";
   import Button from "../Button.svelte";
   import type { SvelteComponent } from "svelte";
+  import { movable } from "$lib/actions/movable";
 
   type ChildComponent = SvelteComponent<Record<string, never>, never, never> & {
     onSave: () => Promise<void>;
@@ -91,7 +93,8 @@
     dialog?.show();
   }
 
-  export function close() {
+  export function close(event: MouseEvent) {
+    event.stopImmediatePropagation();
     if (component) {
       component.onCancel().then(() => dialog?.close());
     }

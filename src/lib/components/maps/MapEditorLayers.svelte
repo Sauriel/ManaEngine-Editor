@@ -1,38 +1,40 @@
-<section use:movable={{ handle: "header" }}>
-  <header><Icon icon="pajamas:drag" /> Layers</header>
-  <ul>
-    {#each layers as layer, index (index)}
-      <li class:active={index === $activeLayerIndex}>
-        <button onclick={() => activeLayerIndex.set(index)}>
-          <span class="move-handle">
-            <Icon icon="pajamas:drag-vertical" />
-          </span>
-          {layer.label}
-        </button>
-        <button class="delete-btn">
-          <Icon icon="pajamas:remove" />
+<Portal>
+  <section use:movable={{ handle: "header" }}>
+    <header><Icon icon="pajamas:drag" /> Layers</header>
+    <ul>
+      {#each layers as layer, index (index)}
+        <li class:active={index === $activeLayerIndex}>
+          <button onclick={() => activeLayerIndex.set(index)}>
+            <span class="move-handle">
+              <Icon icon="pajamas:drag-vertical" />
+            </span>
+            {layer.label}
+          </button>
+          <button class="delete-btn">
+            <Icon icon="pajamas:remove" />
+          </button>
+        </li>
+      {/each}
+      <li class="actions">
+        <button onclick={addLayer}>
+          <Icon icon="fa-solid:plus" />
         </button>
       </li>
-    {/each}
-    <li class="actions">
-      <button onclick={addLayer}>
-        <Icon icon="fa-solid:plus" />
-      </button>
-    </li>
-  </ul>
-</section>
+    </ul>
+  </section>
+</Portal>
 
 <style>
   section {
     position: absolute;
-    top: 1rem;
-    left: 20rem;
+    top: 10rem;
+    left: 10rem;
     background-color: color-mix(in srgb, var(--color-back), transparent 25%);
     border: 1px solid var(--color-back--lighter);
     border-radius: 8px;
     overflow: hidden;
     opacity: 0.2;
-    transition: all var(--transition);
+    transition: opacity var(--transition);
   }
 
   section:hover {
@@ -119,6 +121,7 @@
   import type { ForgeMapLayer } from "$lib/utils/map/types";
   import activeLayerIndex from "$lib/stores/layerStore";
   import { movable } from "$lib/actions/movable";
+  import Portal from "../utils/Portal.svelte";
 
   const layers = $derived<ForgeMapLayer[]>($map.layers);
 

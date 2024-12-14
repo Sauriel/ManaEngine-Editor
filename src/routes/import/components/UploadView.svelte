@@ -181,6 +181,7 @@
       return Promise.reject();
     }
     tilemapStore.load(tilemaps);
+    tilemaps = [];
     return Promise.resolve();
   }
 

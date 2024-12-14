@@ -3,33 +3,41 @@ type MovableParams = {
 };
 
 export function movable(node: HTMLElement, params: MovableParams = {}) {
-  const handle = params.handle
+  const handle: HTMLElement = params.handle
     ? node.querySelector(params.handle) ?? node
     : node;
 
   let isDragging = false;
-  let offsetX = 0;
-  let offsetY = 0;
+  let startX = 0;
+  let startY = 0;
+  let startMouseX = 0;
+  let startMouseY = 0;
 
   function onMouseDown(evt: Event) {
     const event = evt as MouseEvent;
-    isDragging = true;
-    // Berechne den Abstand zwischen dem Mauszeiger und der oberen linken Ecke des Elements
-    offsetX = event.clientX - node.offsetLeft;
-    offsetY = event.clientY - node.offsetTop;
+    if (handle.isEqualNode(event.target! as Node)) {
+      isDragging = true;
+      startX = node.getBoundingClientRect().x;
+      startY = node.getBoundingClientRect().y;
+      startMouseX = event.x;
+      startMouseY = event.y;
 
-    // Verhindert, dass der Text innerhalb des Elements beim Ziehen ausgewählt wird
-    node.style.userSelect = "none";
+      if (getComputedStyle(handle).cursor === "grab") {
+        handle.style.cursor = "grabbing";
+      } else {
+        handle.style.cursor = "move";
+      }
+      node.style.userSelect = "none";
+    }
   }
 
   function onMouseMove(evt: Event) {
     const event = evt as MouseEvent;
     if (isDragging) {
-      // Berechne die neue Position des Elements
-      const left = event.clientX - offsetX;
-      const top = event.clientY - offsetY;
+      const left = startX + (event.x - startMouseX);
+      const top = startY + (event.y - startMouseY);
 
-      // Setze die neue Position des Elements
+      node.style.margin = "0";
       node.style.left = `${left}px`;
       node.style.top = `${top}px`;
     }
@@ -38,12 +46,13 @@ export function movable(node: HTMLElement, params: MovableParams = {}) {
 
   function onMouseUp() {
     isDragging = false;
-    node.style.userSelect = "auto"; // Rückgängig machen der Auswahlbeschränkung
+    handle.style.cursor = "";
+    node.style.userSelect = "";
   }
 
   handle.addEventListener("mousedown", onMouseDown);
-  handle.addEventListener("mousemove", onMouseMove);
-  handle.addEventListener("mouseup", onMouseUp);
+  document.body.addEventListener("mousemove", onMouseMove);
+  document.body.addEventListener("mouseup", onMouseUp);
 
   return {
     update(newParams: MovableParams) {
@@ -51,8 +60,8 @@ export function movable(node: HTMLElement, params: MovableParams = {}) {
     },
     destroy() {
       handle.removeEventListener("mousedown", onMouseDown);
-      handle.removeEventListener("mousemove", onMouseMove);
-      handle.removeEventListener("mouseup", onMouseUp);
+      document.body.removeEventListener("mousemove", onMouseMove);
+      document.body.removeEventListener("mouseup", onMouseUp);
     },
   };
 }
