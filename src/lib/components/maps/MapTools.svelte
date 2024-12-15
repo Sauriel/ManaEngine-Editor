@@ -1,44 +1,78 @@
 <ul>
-  <li class:active={selected === "brush"}>
-    <button aria-label="paint" onclick={() => onselect("brush")}>
+  <li>
+    <button
+      class:active={selected === "brush"}
+      aria-label="paint"
+      onclick={() => onselect("brush")}
+    >
       <Icon icon="heroicons:paint-brush-solid" />
     </button>
   </li>
-  <li class:active={selected === "line"}>
-    <button aria-label="line" onclick={() => onselect("line")}>
+  <li>
+    <button
+      class:active={selected === "line"}
+      disabled
+      aria-label="line"
+      onclick={() => onselect("line")}
+    >
       <Icon icon="proicons:line-diagonal" />
     </button>
   </li>
-  <li class:active={selected === "rect-fill"}>
-    <button aria-label="rect-fill" onclick={() => onselect("rect-fill")}>
+  <li>
+    <button
+      class:active={selected === "rect-fill"}
+      disabled
+      aria-label="rect-fill"
+      onclick={() => onselect("rect-fill")}
+    >
       <Icon icon="ph:rectangle-fill" />
     </button>
   </li>
-  <li class:active={selected === "rect-border"}>
-    <button aria-label="rect-border" onclick={() => onselect("rect-border")}>
+  <li>
+    <button
+      class:active={selected === "rect-border"}
+      disabled
+      aria-label="rect-border"
+      onclick={() => onselect("rect-border")}
+    >
       <Icon icon="ph:rectangle-bold" />
     </button>
   </li>
-  <li class:active={selected === "circle-fill"}>
-    <button aria-label="circle-fill" onclick={() => onselect("circle-fill")}>
+  <li>
+    <button
+      class:active={selected === "circle-fill"}
+      disabled
+      aria-label="circle-fill"
+      onclick={() => onselect("circle-fill")}
+    >
       <Icon icon="ph:circle-fill" />
     </button>
   </li>
-  <li class:active={selected === "circle-border"}>
+  <li>
     <button
+      class:active={selected === "circle-border"}
+      disabled
       aria-label="circle-border"
       onclick={() => onselect("circle-border")}
     >
       <Icon icon="ph:circle-bold" />
     </button>
   </li>
-  <li class:active={selected === "fill"}>
-    <button aria-label="fill" onclick={() => onselect("fill")}>
+  <li>
+    <button
+      class:active={selected === "fill"}
+      aria-label="fill"
+      onclick={() => onselect("fill")}
+    >
       <Icon icon="ph:paint-bucket-fill" />
     </button>
   </li>
-  <li class:active={selected === "eraser"}>
-    <button aria-label="erase" onclick={() => onselect("eraser")}>
+  <li>
+    <button
+      class:active={selected === "eraser"}
+      aria-label="erase"
+      onclick={() => onselect("eraser")}
+    >
       <Icon icon="bi:eraser-fill" />
     </button>
   </li>
@@ -46,46 +80,23 @@
 
 <style>
   ul {
-    position: absolute;
-    left: 1rem;
-    top: 1rem;
-    padding: 0.25em;
+    --gaps: 4px;
+    grid-area: tools;
+    padding: var(--gaps);
     margin: 0;
     list-style: none;
     background-color: var(--color-back--darker);
     width: 3rem;
-    border-radius: 1.5rem;
-    border: 1px solid var(--color-back--lighter);
+    border-left: 1px solid var(--color-back--lighter);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.25em;
+    gap: var(--gaps);
     font-size: 1.5rem;
-    opacity: 0.2;
-    transition: all var(--transition);
-  }
-
-  ul:hover {
-    opacity: 1;
   }
 
   li {
     width: 100%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    overflow: hidden;
-    transition: all var(--transition);
-    box-shadow: 2px 2px 4px
-      color-mix(in srgb, var(--color-back), transparent 25%);
-  }
-
-  li.active {
-    background-color: var(--color-primary);
-  }
-
-  li:hover {
-    background-color: var(--color-front--darker);
-    color: var(--color-back);
   }
 
   button {
@@ -95,7 +106,21 @@
     justify-content: center;
     cursor: pointer;
     width: 100%;
-    height: 100%;
+    aspect-ratio: 1;
+  }
+
+  button.active {
+    background-color: var(--color-primary);
+  }
+
+  button:hover {
+    background-color: var(--color-front--darker);
+    color: var(--color-back);
+  }
+
+  button:disabled {
+    opacity: 0.2;
+    pointer-events: none;
   }
 </style>
 

@@ -1,3 +1,7 @@
+<MapTools
+  selected={selectedTool}
+  onselect={(value) => (selectedTool = value)}
+/>
 <div id="map" style={`--tileSize: ${tileSize}px;`}>
   <canvas
     bind:this={canvas}
@@ -7,10 +11,6 @@
     onmousemove={onCanvasMouseMove}
     onmouseup={onCanvasMouseUp}
   ></canvas>
-  <MapTools
-    selected={selectedTool}
-    onselect={(value) => (selectedTool = value)}
-  />
   <MapEditorLayers />
 </div>
 

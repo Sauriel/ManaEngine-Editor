@@ -7,8 +7,8 @@
   #map-editor {
     --header-size: 2.5rem;
     display: grid;
-    grid-template-areas: "map tilemap";
-    grid-template-columns: 1fr auto;
+    grid-template-areas: "tools map tilemap";
+    grid-template-columns: auto 1fr auto;
   }
 </style>
 
