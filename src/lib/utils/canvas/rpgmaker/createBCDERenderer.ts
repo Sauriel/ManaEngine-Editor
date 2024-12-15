@@ -1,12 +1,12 @@
 import { createSingleTiles } from "./TileRenderer";
-import type { TileRendererConfig, TileType } from "./types";
+import type { TileRendererConfig, TileSource, TileType } from "./types";
 
 export default function createBCDERenderer(
-  image: HTMLImageElement,
+  source: TileSource,
   type: TileType
 ): TileRendererConfig[] {
   return [
-    ...createSingleTiles(image, 8, 16, type),
-    ...createSingleTiles(image, 8, 16, type, 384),
+    ...createSingleTiles(source, 8, 16, type),
+    ...createSingleTiles(source, 8, 16, type, 384),
   ];
 }

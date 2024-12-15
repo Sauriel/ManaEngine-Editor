@@ -1,8 +1,9 @@
 import type TileRenderer from "./TileRenderer";
+import type { TileSource } from "./types";
 
 export default class SimpleTileRenderer implements TileRenderer {
   constructor(
-    private readonly tilemap: HTMLImageElement,
+    private readonly tilemap: TileSource,
     private readonly xStart: number,
     private readonly yStart: number,
     private readonly tileSize: number = 48
@@ -14,7 +15,7 @@ export default class SimpleTileRenderer implements TileRenderer {
 
   public draw(ctx: CanvasRenderingContext2D, x: number, y: number) {
     ctx.drawImage(
-      this.tilemap,
+      this.tilemap.data,
       this.xStart,
       this.yStart,
       this.tileSize,

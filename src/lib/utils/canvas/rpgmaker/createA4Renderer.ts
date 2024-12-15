@@ -1,10 +1,10 @@
 import SimpleAutoTileRenderer from "./SimpleAutoTileRenderer";
 import SimpleSemiAutoTileRenderer from "./SimpleSemiAutoTileRenderer";
 import { createAutoTiles } from "./TileRenderer";
-import type { TilePositions, TileRendererConfig } from "./types";
+import type { TilePositions, TileRendererConfig, TileSource } from "./types";
 
 export default function createA4Renderer(
-  image: HTMLImageElement
+  source: TileSource
 ): TileRendererConfig[] {
   const positions: TilePositions = {
     0: [0, 96, 192, 288, 384, 480, 576, 672],
@@ -14,11 +14,11 @@ export default function createA4Renderer(
     480: [0, 96, 192, 288, 384, 480, 576, 672],
     624: [0, 96, 192, 288, 384, 480, 576, 672],
   };
-  return createAutoTiles("A4", image, positions, (image, x, y, tileSize) => {
+  return createAutoTiles("A4", source, positions, (source, x, y, tileSize) => {
     if (y % 10 === 0) {
-      return new SimpleAutoTileRenderer(image, x, y, tileSize);
+      return new SimpleAutoTileRenderer(source, x, y, tileSize);
     } else {
-      return new SimpleSemiAutoTileRenderer(image, x, y, tileSize);
+      return new SimpleSemiAutoTileRenderer(source, x, y, tileSize);
     }
   });
 }

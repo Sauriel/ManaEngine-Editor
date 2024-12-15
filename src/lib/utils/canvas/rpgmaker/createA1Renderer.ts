@@ -1,9 +1,9 @@
 import SimpleAutoTileRenderer from "./SimpleAutoTileRenderer";
 import { createAutoTiles } from "./TileRenderer";
-import type { TilePositions, TileRendererConfig } from "./types";
+import type { TilePositions, TileRendererConfig, TileSource } from "./types";
 
 export default function createA1Renderer(
-  image: HTMLImageElement
+  source: TileSource
 ): TileRendererConfig[] {
   const positions: TilePositions = {
     0: [0, 288, 384, 672],
@@ -13,8 +13,9 @@ export default function createA1Renderer(
   };
   return createAutoTiles(
     "A1",
-    image,
+    source,
     positions,
-    (image, x, y, tileSize) => new SimpleAutoTileRenderer(image, x, y, tileSize)
+    (source, x, y, tileSize) =>
+      new SimpleAutoTileRenderer(source, x, y, tileSize)
   );
 }

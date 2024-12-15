@@ -22,6 +22,7 @@
 <script lang="ts">
   import FileUpload from "$lib/components/ui/FileUpload.svelte";
   import tilemapStore from "$lib/stores/tilemapStore";
+  import type { TileSource, TileType } from "$lib/utils/canvas/rpgmaker/types";
   import {
     type TileMapType,
     type ImportedTilemap,
@@ -161,11 +162,26 @@
     }
   }
 
+  function convertToSource(tilemap: ImportedTilemap): TileSource {
+    let tileType: TileType;
+    if (!tilemap.type || tilemap.type === "custom") {
+      tileType = "E"; // this should not happen;
+    } else {
+      tileType = tilemap.type;
+    }
+    return {
+      name: tilemap.filename.split(".").shift() ?? "UNKNOWN",
+      type: tileType,
+      data: tilemap.image,
+      dataType: "HTMLImageElement",
+    };
+  }
+
   export function onSave(): Promise<void> {
     if (invalid) {
       return Promise.reject();
     }
-    tilemapStore.load(tilemaps);
+    tilemapStore.load(tilemaps.map(convertToSource));
     tilemaps = [];
     return Promise.resolve();
   }

@@ -27,6 +27,7 @@
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
     "@tauri-apps/cli": "^2",
     "@types/lodash": "^4.17.12",
+    "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "svelte": "^5.0.5",
     "svelte-check": "^4.0.5",

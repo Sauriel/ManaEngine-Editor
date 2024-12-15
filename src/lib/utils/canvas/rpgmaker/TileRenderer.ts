@@ -4,6 +4,7 @@ import type {
   TilePositions,
   TileRendererConfig,
   AutoTileConfig,
+  TileSource,
 } from "./types";
 
 export default interface TileRenderer {
@@ -18,16 +19,16 @@ export default interface TileRenderer {
 
 export function createAutoTiles(
   type: TileType,
-  image: HTMLImageElement,
+  source: TileSource,
   positions: TilePositions,
   createRenderer: (
-    image: HTMLImageElement,
+    source: TileSource,
     x: number,
     y: number,
     tileSize?: number
   ) => TileRenderer
 ): TileRendererConfig[] {
-  const fileName = image.src.split("/").pop()!.split(".").shift();
+  const fileName = source.name;
   const renderer: TileRendererConfig[] = [];
   let position = 1;
   Object.entries(positions).forEach(([y, xs]) => {
@@ -38,7 +39,7 @@ export function createAutoTiles(
         auto: true,
         type: type,
         position: pos,
-        renderer: createRenderer(image, x, Number(y)),
+        renderer: createRenderer(source, x, Number(y)),
       });
     });
   });
@@ -46,13 +47,13 @@ export function createAutoTiles(
 }
 
 export function createSingleTiles(
-  image: HTMLImageElement,
+  source: TileSource,
   width: number,
   height: number,
   type: TileType,
   xOffset: number = 0
 ): TileRendererConfig[] {
-  const fileName = image.src.split("/").pop()!.split(".").shift();
+  const fileName = source.name;
   const renderer: TileRendererConfig[] = [];
   let position = 1;
   for (let y = 0; y < height; y++) {
@@ -63,7 +64,7 @@ export function createSingleTiles(
         auto: false,
         type: type,
         position: pos,
-        renderer: new SimpleTileRenderer(image, x * 48 + xOffset, y * 48),
+        renderer: new SimpleTileRenderer(source, x * 48 + xOffset, y * 48),
       });
     }
   }

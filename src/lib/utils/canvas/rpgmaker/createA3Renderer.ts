@@ -1,9 +1,9 @@
 import SimpleSemiAutoTileRenderer from "./SimpleSemiAutoTileRenderer";
 import { createAutoTiles } from "./TileRenderer";
-import type { TilePositions, TileRendererConfig } from "./types";
+import type { TilePositions, TileRendererConfig, TileSource } from "./types";
 
 export default function createA3Renderer(
-  image: HTMLImageElement
+  source: TileSource
 ): TileRendererConfig[] {
   const positions: TilePositions = {
     0: [0, 96, 192, 288, 384, 480, 576, 672],
@@ -13,9 +13,9 @@ export default function createA3Renderer(
   };
   return createAutoTiles(
     "A3",
-    image,
+    source,
     positions,
-    (image, x, y, tileSize) =>
-      new SimpleSemiAutoTileRenderer(image, x, y, tileSize)
+    (source, x, y, tileSize) =>
+      new SimpleSemiAutoTileRenderer(source, x, y, tileSize)
   );
 }

@@ -20,6 +20,22 @@ export const TILEMAP_TYPES = [
 export type TileType = (typeof TILEMAP_TYPES)[number];
 // export type TileType = "a1" | "a2" | "a3" | "a4" | "a5" | "b" | "c" | "d" | "e";
 
+export type SourceDataType =
+  | "ImageBitmap"
+  | "HTMLCanvasElement"
+  | "HTMLImageElement"
+  | "HTMLVideoElement"
+  | "OffscreenCanvas"
+  | "SVGImageElement"
+  | "VideoFrame";
+
+export type TileSource = {
+  name: string;
+  type: TileType;
+  data: CanvasImageSource;
+  dataType: SourceDataType;
+};
+
 export type TileRendererConfig = {
   key: string;
   auto: boolean;

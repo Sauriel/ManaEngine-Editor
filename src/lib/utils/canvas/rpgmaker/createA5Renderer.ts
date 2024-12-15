@@ -1,8 +1,8 @@
 import { createSingleTiles } from "./TileRenderer";
-import type { TileRendererConfig } from "./types";
+import type { TileRendererConfig, TileSource } from "./types";
 
 export default function createA5Renderer(
-  image: HTMLImageElement
+  source: TileSource
 ): TileRendererConfig[] {
-  return createSingleTiles(image, 8, 16, "A5");
+  return createSingleTiles(source, 8, 16, "A5");
 }

@@ -1,11 +1,11 @@
 import type TileRenderer from "./TileRenderer";
-import type { AutoTileConfig, SubTileType } from "./types";
+import type { AutoTileConfig, SubTileType, TileSource } from "./types";
 
 export default class SimpleSemiAutoTileRenderer implements TileRenderer {
   private readonly hts: number; // htf = halfTileSize
 
   constructor(
-    private readonly tilemap: HTMLImageElement,
+    private readonly tilemap: TileSource,
     private readonly xStart: number,
     private readonly yStart: number,
     private readonly tileSize: number = 48
@@ -59,7 +59,7 @@ export default class SimpleSemiAutoTileRenderer implements TileRenderer {
         break;
     }
     ctx.drawImage(
-      this.tilemap,
+      this.tilemap.data,
       imageX,
       imageY,
       this.hts,
@@ -96,7 +96,7 @@ export default class SimpleSemiAutoTileRenderer implements TileRenderer {
         break;
     }
     ctx.drawImage(
-      this.tilemap,
+      this.tilemap.data,
       imageX,
       imageY,
       this.hts,
@@ -133,7 +133,7 @@ export default class SimpleSemiAutoTileRenderer implements TileRenderer {
         break;
     }
     ctx.drawImage(
-      this.tilemap,
+      this.tilemap.data,
       imageX,
       imageY,
       this.hts,
@@ -172,7 +172,7 @@ export default class SimpleSemiAutoTileRenderer implements TileRenderer {
         break;
     }
     ctx.drawImage(
-      this.tilemap,
+      this.tilemap.data,
       imageX,
       imageY,
       this.hts,
