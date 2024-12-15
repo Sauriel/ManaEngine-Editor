@@ -22,11 +22,16 @@
 <script lang="ts">
   import { gameloop } from "$lib/stores/gameloop";
   import selectedTiles from "$lib/stores/selectedTilesStore";
-  import tilemapStore from "$lib/stores/tilemapStore";
   import { drawCheckerBg } from "$lib/utils/canvas/checkerBg";
   import type { TileRendererConfig } from "$lib/utils/canvas/rpgmaker/types";
   import { type MousePosition } from "$lib/utils/canvas/types";
   import { onDestroy, onMount } from "svelte";
+
+  type Props = {
+    tilemaps: TileRendererConfig[];
+  };
+
+  const { tilemaps }: Props = $props();
 
   const activeBorderWidth = 4;
   const GL_ID = "tilemap-renderer";
@@ -38,7 +43,7 @@
 
   const width = $derived<number>(tilemapWidth * tileSize);
   const height = $derived<number>(
-    Math.ceil($tilemapStore.length / tilemapWidth) * tileSize
+    Math.ceil(tilemaps.length / tilemapWidth) * tileSize
   );
 
   onMount(() => {
@@ -61,8 +66,8 @@
         for (let x = 0; x < width; x += tileSize) {
           drawCheckerBg(ctx, tileSize, x, y);
 
-          if ($tilemapStore.length > 0 && tilemapIndex < $tilemapStore.length) {
-            const tile = $tilemapStore[tilemapIndex++];
+          if (tilemaps.length > 0 && tilemapIndex < tilemaps.length) {
+            const tile = tilemaps[tilemapIndex++];
             tile.renderer.drawPreview(ctx, x, y);
 
             if (selectedTiles.includes(tile.key)) {
@@ -102,7 +107,7 @@
 
   function findTile(position: MousePosition): TileRendererConfig | null {
     const index = position.y * tilemapWidth + position.x;
-    return index < $tilemapStore.length ? $tilemapStore[index] : null;
+    return index < tilemaps.length ? tilemaps[index] : null;
   }
 
   function getAllPointsInArea(

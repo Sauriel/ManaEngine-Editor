@@ -36,6 +36,12 @@ export type TileSource = {
   dataType: SourceDataType;
 };
 
+export type TileRendererConfigGroup = {
+  name: string;
+  icon?: string;
+  configs: TileRendererConfig[];
+};
+
 export type TileRendererConfig = {
   key: string;
   auto: boolean;

@@ -1,6 +1,6 @@
 <section id="map-editor">
   <MapEditorMap />
-  <MapEditorTilemap />
+  <MapEditorTilemapGroups />
 </section>
 
 <style>
@@ -15,7 +15,7 @@
 <script lang="ts">
   import { gameloop } from "$lib/stores/gameloop";
   import MapEditorMap from "./MapEditorMap.svelte";
-  import MapEditorTilemap from "./MapEditorTilemap.svelte";
+  import MapEditorTilemapGroups from "./MapEditorTilemapGroups.svelte";
 
   gameloop.start();
 </script>
