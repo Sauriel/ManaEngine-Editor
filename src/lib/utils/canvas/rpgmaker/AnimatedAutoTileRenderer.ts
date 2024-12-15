@@ -1,22 +1,24 @@
-import { GLOBAL_FPS, GLOBAL_TILE_ANIMATION_SPEED } from "$lib/utils/constants";
+import {
+  GLOBAL_TILE_ANIMATION_MODE,
+  GLOBAL_TILE_ANIMATION_SPEED,
+} from "$lib/utils/constants";
 import type TileRenderer from "./TileRenderer";
 import type { AutoTileConfig, SubTileType, TileSource } from "./types";
-
-export type AnimationType = "autotile" | "flow" | null;
 
 export default class AnimatedAutoTileRenderer implements TileRenderer {
   private readonly hts: number; // htf = halfTileSize
   private accumulatedTime: number = 0;
   private animationDuration: number = 1000;
-  private frame: number = 0;
+  private animationStep: number = 0;
   private animationOffset: number = 0;
+
+  private steps = 1;
 
   constructor(
     private readonly tilemap: TileSource,
     private readonly xStart: number,
     private readonly yStart: number,
-    private readonly tileSize: number = 48,
-    private readonly animationType: AnimationType = null
+    private readonly tileSize: number = 48
   ) {
     this.hts = this.tileSize / 2;
     if (GLOBAL_TILE_ANIMATION_SPEED !== 0) {
@@ -27,10 +29,13 @@ export default class AnimatedAutoTileRenderer implements TileRenderer {
   public update(deltaTime: number): void {
     this.accumulatedTime += deltaTime;
     if (this.accumulatedTime >= this.animationDuration) {
-      this.frame = (this.frame + 1) % 3;
-      if (this.animationType === "autotile") {
-        this.animationOffset = this.tileSize * 2 * this.frame;
+      this.animationStep = (this.animationStep + this.steps) % 3;
+      if (GLOBAL_TILE_ANIMATION_MODE === "alternating") {
+        if (this.animationStep === 0 || this.animationStep === 2) {
+          this.steps *= -1;
+        }
       }
+      this.animationOffset = this.tileSize * 2 * this.animationStep;
       this.accumulatedTime -= this.animationDuration;
     }
   }

@@ -1,6 +1,6 @@
-import AnimatedAutoTileRenderer, {
-  type AnimationType,
-} from "./AnimatedAutoTileRenderer";
+import AnimatedAutoTileRenderer from "./AnimatedAutoTileRenderer";
+import AnimatedFlowTileRenderer from "./AnimatedFlowTileRenderer";
+import SimpleAutoTileRenderer from "./SimpleAutoTileRenderer";
 import { createAutoTiles } from "./TileRenderer";
 import type {
   TilePositions,
@@ -10,18 +10,20 @@ import type {
   YPos,
 } from "./types";
 
-type AnimationConfig = Record<YPos, Record<XPos, AnimationType>>;
+export type AnimationMode = "autotile" | "flow" | "none";
+
+type AnimationConfig = Record<YPos, Record<XPos, AnimationMode>>;
 
 const ANIMATION_CONFIG: AnimationConfig = {
   0: {
     0: "autotile",
-    288: null,
+    288: "none",
     384: "autotile",
     672: "flow",
   },
   144: {
     0: "autotile",
-    288: null,
+    288: "none",
     384: "autotile",
     672: "flow",
   },
@@ -35,7 +37,7 @@ const ANIMATION_CONFIG: AnimationConfig = {
     0: "autotile",
     288: "flow",
     384: "autotile",
-    672: null,
+    672: "none",
   },
 };
 
@@ -54,17 +56,15 @@ export default function createA1Renderer(
   //   288: [0, 288, 384, 672],
   //   432: [0, 288, 384, 672],
   // };
-  return createAutoTiles(
-    "A1",
-    source,
-    positions,
-    (source, x, y, tileSize) =>
-      new AnimatedAutoTileRenderer(
-        source,
-        x,
-        y,
-        tileSize,
-        ANIMATION_CONFIG[y][x]
-      )
-  );
+  return createAutoTiles("A1", source, positions, (source, x, y, tileSize) => {
+    const animationMode = ANIMATION_CONFIG[y][x];
+    switch (animationMode) {
+      case "autotile":
+        return new AnimatedAutoTileRenderer(source, x, y, tileSize);
+      case "flow":
+        return new AnimatedFlowTileRenderer(source, x, y, tileSize);
+      case "none":
+        return new SimpleAutoTileRenderer(source, x, y, tileSize);
+    }
+  });
 }
