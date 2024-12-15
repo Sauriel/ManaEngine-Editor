@@ -35,6 +35,10 @@
   import tilemapStore from "$lib/stores/tilemapStore";
   import activeLayerIndex from "$lib/stores/layerStore";
   import MapEditorLayers from "./MapEditorLayers.svelte";
+  import {
+    GLOBAL_SHOW_ANIMATIONS,
+    GLOBAL_SHOW_OUT_OF_BOUNDS_MAPAREA,
+  } from "$lib/utils/constants";
 
   const GL_ID = "map-renderer";
   let canvas: HTMLCanvasElement;
@@ -50,7 +54,11 @@
     gameloop.addLoopParticipant({
       id: GL_ID,
       render: redrawCanvas,
-      update: tilemapStore.gameloopUpdate,
+      update: (deltaTime) => {
+        if (GLOBAL_SHOW_ANIMATIONS) {
+          tilemapStore.gameloopUpdate(deltaTime);
+        }
+      },
     });
   });
 
@@ -74,6 +82,20 @@
           }
         }
       }
+      // draw bounds
+      const outOfBoundsColor = getComputedStyle(document.body).getPropertyValue(
+        "--color-back"
+      );
+      ctx.globalAlpha = GLOBAL_SHOW_OUT_OF_BOUNDS_MAPAREA ? 0.75 : 1;
+      ctx.lineWidth = tileSize;
+      ctx.strokeStyle = outOfBoundsColor;
+      ctx.strokeRect(
+        tileSize / 2,
+        tileSize / 2,
+        width - tileSize,
+        height - tileSize
+      );
+      ctx.globalAlpha = 1;
     }
   }
 

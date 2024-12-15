@@ -2,8 +2,8 @@ import type { ForgeMap, ForgeMapLayer, TileName } from "./types";
 
 export default function createMap(width: number, height: number): ForgeMap {
   const map: ForgeMap = {
-    width,
-    height,
+    width: width + 2,
+    height: height + 2,
     layers: [],
   };
   createLayer(map, "Layer 1");

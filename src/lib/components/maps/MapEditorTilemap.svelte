@@ -45,6 +45,8 @@
     gameloop.addLoopParticipant({
       id: GL_ID,
       render: redrawCanvas,
+      // the update is done by the MapEditorMap.
+      // The Renderer are single instances and will update faster if you run it more often
     });
   });
 
