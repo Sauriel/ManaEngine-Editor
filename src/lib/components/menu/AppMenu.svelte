@@ -18,12 +18,9 @@
 </style>
 
 <script lang="ts">
-  import Icon from "@iconify/svelte";
-  import NavItem from "$lib/components/NavItem.svelte";
   import Window from "$lib/components/ui/window/Window.svelte";
   import UploadView from "$lib/../routes/import/components/UploadView.svelte";
   import type { WindowConfig } from "$lib/components/ui/window/types";
-  import Button from "$lib/components/ui/Button.svelte";
   import type { AppMenuItemProp } from "./types";
   import AppMenuItem from "./AppMenuItem.svelte";
 

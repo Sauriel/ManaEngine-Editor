@@ -12,7 +12,7 @@ export default function createA2Renderer(
     432: [0, 96, 192, 288, 384, 480, 576, 672],
   };
   return createAutoTiles(
-    "a2",
+    "A2",
     image,
     positions,
     (image, x, y, tileSize) => new SimpleAutoTileRenderer(image, x, y, tileSize)

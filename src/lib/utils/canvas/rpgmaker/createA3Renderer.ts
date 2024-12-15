@@ -12,7 +12,7 @@ export default function createA3Renderer(
     288: [0, 96, 192, 288, 384, 480, 576, 672],
   };
   return createAutoTiles(
-    "a3",
+    "A3",
     image,
     positions,
     (image, x, y, tileSize) =>

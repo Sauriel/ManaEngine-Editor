@@ -14,7 +14,7 @@ export default function createA4Renderer(
     480: [0, 96, 192, 288, 384, 480, 576, 672],
     624: [0, 96, 192, 288, 384, 480, 576, 672],
   };
-  return createAutoTiles("a4", image, positions, (image, x, y, tileSize) => {
+  return createAutoTiles("A4", image, positions, (image, x, y, tileSize) => {
     if (y % 10 === 0) {
       return new SimpleAutoTileRenderer(image, x, y, tileSize);
     } else {
