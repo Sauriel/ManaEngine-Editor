@@ -50,6 +50,7 @@
     gameloop.addLoopParticipant({
       id: GL_ID,
       render: redrawCanvas,
+      update: tilemapStore.gameloopUpdate,
     });
   });
 

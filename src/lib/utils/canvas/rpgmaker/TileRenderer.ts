@@ -15,6 +15,7 @@ export default interface TileRenderer {
     y: number,
     config?: AutoTileConfig
   ): void;
+  update(deltaTime: number): void;
 }
 
 export function createAutoTiles(

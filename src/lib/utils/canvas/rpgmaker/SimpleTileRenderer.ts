@@ -13,6 +13,10 @@ export default class SimpleTileRenderer implements TileRenderer {
     this.draw(ctx, x, y);
   }
 
+  public update(deltaTime: number): void {
+    //
+  }
+
   public draw(ctx: CanvasRenderingContext2D, x: number, y: number) {
     ctx.drawImage(
       this.tilemap.data,

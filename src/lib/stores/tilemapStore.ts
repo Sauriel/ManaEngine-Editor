@@ -70,6 +70,8 @@ const tilemapStore = {
   subscribe: tilemaps.subscribe,
   update: tilemaps.update,
   set: tilemaps.set,
+  gameloopUpdate: (deltaTime: number) =>
+    get(tilemaps).forEach((tm) => tm.renderer.update(deltaTime)),
   find: (key: string) => get(tilemaps).find((tile) => tile.key === key),
   load: (sources: TileSource[]) => {
     persistTileSources(sources);

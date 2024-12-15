@@ -13,6 +13,10 @@ export default class SimpleAutoTileRenderer implements TileRenderer {
     this.hts = this.tileSize / 2;
   }
 
+  public update(deltaTime: number): void {
+    //
+  }
+
   public drawPreview(ctx: CanvasRenderingContext2D, x: number, y: number) {
     ctx.drawImage(
       this.tilemap.data,

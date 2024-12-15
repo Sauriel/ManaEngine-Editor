@@ -16,7 +16,7 @@ export default class GameLoop {
   private update(deltaTime: number): void {
     // Hier kommt die Logik deines Spiels hin (z.B. Bewegung, Kollisionsabfragen)
     // console.log(`Updating game logic with deltaTime: ${deltaTime}ms`);
-    this.loopParticipants.forEach((p) => p.update && p.update());
+    this.loopParticipants.forEach((p) => p.update && p.update(deltaTime));
   }
 
   private render(): void {
@@ -77,6 +77,6 @@ export default class GameLoop {
 
 export type GameLoopParticipant = {
   id: string;
-  update?: () => void;
+  update?: (deltaTime: number) => void;
   render?: () => void;
 };
