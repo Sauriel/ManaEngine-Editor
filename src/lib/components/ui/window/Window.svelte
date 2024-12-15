@@ -125,7 +125,9 @@
   }
 
   function onSizeChange(size: ElementSize) {
-    persistWindowState({ size });
+    if (size.height > 0 && size.width > 0) {
+      persistWindowState({ size });
+    }
   }
 
   function loadWindowState() {
@@ -135,6 +137,8 @@
     ) as PersistedWindowState;
     const styles: string[] = [];
     if (state.position) {
+      styles.push("position: fixed;");
+      styles.push("margin: 0;");
       styles.push(`left: ${state.position.x}px;`);
       styles.push(`top: ${state.position.y}px;`);
     }

@@ -18,6 +18,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+button {
+  all: unset;
+}
+
 input,
 textarea,
 button {
