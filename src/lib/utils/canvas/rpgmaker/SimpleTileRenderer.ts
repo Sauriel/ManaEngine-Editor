@@ -1,3 +1,4 @@
+import { GLOBAL_TILE_BASE_SIZE } from "$lib/utils/constants";
 import type TileRenderer from "./TileRenderer";
 import type { TileSource } from "./types";
 
@@ -6,7 +7,7 @@ export default class SimpleTileRenderer implements TileRenderer {
     private readonly tilemap: TileSource,
     private readonly xStart: number,
     private readonly yStart: number,
-    private readonly tileSize: number = 48
+    private readonly tileSize: number = GLOBAL_TILE_BASE_SIZE
   ) {}
 
   public drawPreview(ctx: CanvasRenderingContext2D, x: number, y: number) {

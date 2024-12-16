@@ -148,12 +148,12 @@
   import Icon from "@iconify/svelte";
   import {
     PREVIEW_SIZE,
-    TILE_BASE_SIZE,
     type ImportedTilemap,
     type TileMapType,
   } from "./types";
   import { drawCheckerBg } from "$lib/utils/canvas/checkerBg";
   import { TILEMAP_TYPES } from "$lib/utils/canvas/rpgmaker/types";
+  import { GLOBAL_TILE_BASE_SIZE } from "$lib/utils/constants";
 
   interface Props {
     tilemap: ImportedTilemap;
@@ -171,7 +171,7 @@
       previewCanvas.width = tilemap.canvas.width;
       previewCanvas.height = tilemap.canvas.height;
       const context = previewCanvas.getContext("2d");
-      const tileSize = TILE_BASE_SIZE / PREVIEW_SIZE;
+      const tileSize = GLOBAL_TILE_BASE_SIZE / PREVIEW_SIZE;
       if (context) {
         for (let y = 0; y < previewCanvas.height; y += tileSize) {
           for (let x = 0; x < previewCanvas.width; x += tileSize) {

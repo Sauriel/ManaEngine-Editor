@@ -1,6 +1,7 @@
 import {
   GLOBAL_TILE_ANIMATION_MODE,
   GLOBAL_TILE_ANIMATION_SPEED,
+  GLOBAL_TILE_BASE_SIZE,
 } from "$lib/utils/constants";
 import type TileRenderer from "./TileRenderer";
 import type { AutoTileConfig, SubTileType, TileSource } from "./types";
@@ -18,7 +19,7 @@ export default class AnimatedFlowTileRenderer implements TileRenderer {
     private readonly tilemap: TileSource,
     private readonly xStart: number,
     private readonly yStart: number,
-    private readonly tileSize: number = 48
+    private readonly tileSize: number = GLOBAL_TILE_BASE_SIZE
   ) {
     this.hts = this.tileSize / 2;
     if (GLOBAL_TILE_ANIMATION_SPEED !== 0) {

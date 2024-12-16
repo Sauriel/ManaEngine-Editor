@@ -14,6 +14,10 @@
 
 <style>
   #app {
+    --app-menu-height: 2.5rem;
+    display: grid;
+    grid-template-areas: "menu" "content";
+    grid-template-rows: var(--app-menu-height) 1fr;
     min-height: 100dvh;
   }
 

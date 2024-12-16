@@ -1,21 +1,24 @@
 <section id="map-editor">
   <MapEditorMap />
-  <MapEditorTilemapGroups />
+  <MapEditorSidebar />
 </section>
 
 <style>
   #map-editor {
     --header-size: 2.5rem;
     display: grid;
-    grid-template-areas: "tools map tilemap";
+    grid-template-areas: "tools map sidebar";
     grid-template-columns: auto 1fr auto;
   }
 </style>
 
 <script lang="ts">
   import { gameloop } from "$lib/stores/gameloop";
+  import { GLOBAL_SHOW_ANIMATIONS } from "$lib/utils/constants";
   import MapEditorMap from "./MapEditorMap.svelte";
-  import MapEditorTilemapGroups from "./MapEditorTilemapGroups.svelte";
+  import MapEditorSidebar from "./MapEditorSidebar.svelte";
 
-  gameloop.start();
+  if (GLOBAL_SHOW_ANIMATIONS) {
+    gameloop.start();
+  }
 </script>

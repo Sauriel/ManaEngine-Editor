@@ -1,3 +1,4 @@
+import { GLOBAL_TILE_BASE_SIZE } from "$lib/utils/constants";
 import SimpleTileRenderer from "./SimpleTileRenderer";
 import type {
   TileType,
@@ -65,7 +66,11 @@ export function createSingleTiles(
         auto: false,
         type: type,
         position: pos,
-        renderer: new SimpleTileRenderer(source, x * 48 + xOffset, y * 48),
+        renderer: new SimpleTileRenderer(
+          source,
+          x * GLOBAL_TILE_BASE_SIZE + xOffset,
+          y * GLOBAL_TILE_BASE_SIZE
+        ),
       });
     }
   }

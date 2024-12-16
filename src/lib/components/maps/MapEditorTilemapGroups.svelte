@@ -11,19 +11,21 @@
       </li>
     {/each}
   </ul>
-  <section>
-    <MapEditorTilemap tilemaps={selectedTilemaps} />
-  </section>
+  <MapEditorTilemap tilemaps={selectedTilemaps} />
 </div>
 
 <style>
   #tilemaps {
-    display: grid;
-    grid-template-areas: "tabs tilemaps";
+    grid-area: tilemap;
+    position: relative;
+    height: calc(100dvh - var(--header-size) - var(--layers-height));
   }
 
   ul {
-    grid-area: tabs;
+    position: absolute;
+    top: 0;
+    left: 0;
+    translate: -100%;
     display: flex;
     flex-direction: column;
     padding: 0;
@@ -58,11 +60,6 @@
   button.active {
     background-color: var(--color-primary);
     border-color: var(--color-primary--darker);
-  }
-
-  section {
-    grid-area: tilemaps;
-    border-left: 1px solid var(--color-back--lighter);
   }
 </style>
 

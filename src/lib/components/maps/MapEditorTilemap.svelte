@@ -1,4 +1,4 @@
-<aside style={`--tileSize: ${tileSize}px;`}>
+<section style={`--tileSize: ${tileSize}px;`}>
   <canvas
     bind:this={canvas}
     {width}
@@ -7,15 +7,14 @@
     onmousemove={onTileSelectionMove}
     onmouseup={onTileSelectionEnd}
   ></canvas>
-</aside>
+</section>
 
 <style>
-  aside {
-    grid-area: tilemap;
+  section {
     width: calc(8 * var(--tileSize) + var(--scrollbar-width));
     overflow-y: auto;
     overflow-x: hidden;
-    max-height: 100dvh;
+    height: 100%;
   }
 </style>
 
@@ -25,7 +24,12 @@
   import { drawCheckerBg } from "$lib/utils/canvas/checkerBg";
   import type { TileRendererConfig } from "$lib/utils/canvas/rpgmaker/types";
   import { type MousePosition } from "$lib/utils/canvas/types";
+  import {
+    GLOBAL_SHOW_ANIMATIONS,
+    GLOBAL_TILE_BASE_SIZE,
+  } from "$lib/utils/constants";
   import { onDestroy, onMount } from "svelte";
+  import type { Unsubscriber } from "svelte/store";
 
   type Props = {
     tilemaps: TileRendererConfig[];
@@ -33,11 +37,13 @@
 
   const { tilemaps }: Props = $props();
 
+  let unsubscribe: Unsubscriber;
+
   const activeBorderWidth = 4;
   const GL_ID = "tilemap-renderer";
   let canvas: HTMLCanvasElement;
 
-  const tileSize = $state<number>(48);
+  const tileSize = $state<number>(GLOBAL_TILE_BASE_SIZE);
   const tilemapWidth = $state<number>(8);
   let mouseDownPosition = $state<MousePosition | null>(null);
 
@@ -53,9 +59,26 @@
       // the update is done by the MapEditorMap.
       // The Renderer are single instances and will update faster if you run it more often
     });
+    if (!GLOBAL_SHOW_ANIMATIONS) {
+      redrawCanvas();
+    }
   });
 
-  onDestroy(() => gameloop.removeLoopParticipant(GL_ID));
+  $effect(() => {
+    if (!GLOBAL_SHOW_ANIMATIONS) {
+      tilemaps;
+      redrawCanvas();
+    }
+  });
+
+  unsubscribe = selectedTiles.subscribe(() => {
+    redrawCanvas();
+  });
+
+  onDestroy(() => {
+    gameloop.removeLoopParticipant(GL_ID);
+    unsubscribe();
+  });
 
   function redrawCanvas() {
     if (canvas) {

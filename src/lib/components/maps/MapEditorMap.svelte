@@ -38,12 +38,13 @@
   import {
     GLOBAL_SHOW_ANIMATIONS,
     GLOBAL_SHOW_OUT_OF_BOUNDS_MAPAREA,
+    GLOBAL_TILE_BASE_SIZE,
   } from "$lib/utils/constants";
 
   const GL_ID = "map-renderer";
   let canvas: HTMLCanvasElement;
 
-  const tileSize = $state<number>(48);
+  const tileSize = $state<number>(GLOBAL_TILE_BASE_SIZE);
   let selectedTool = $state<Tool>("brush");
   let mouseDownPosition = $state<MousePosition | null>(null);
 
@@ -54,12 +55,11 @@
     gameloop.addLoopParticipant({
       id: GL_ID,
       render: redrawCanvas,
-      update: (deltaTime) => {
-        if (GLOBAL_SHOW_ANIMATIONS) {
-          tilemapStore.gameloopUpdate(deltaTime);
-        }
-      },
+      update: tilemapStore.gameloopUpdate,
     });
+    if (!GLOBAL_SHOW_ANIMATIONS) {
+      redrawCanvas();
+    }
   });
 
   onDestroy(() => gameloop.removeLoopParticipant(GL_ID));
@@ -121,6 +121,9 @@
     } else if (selectedTool === "eraser") {
       map.remove($activeLayerIndex, position);
     }
+    if (!GLOBAL_SHOW_ANIMATIONS) {
+      redrawCanvas();
+    }
   }
 
   function onCanvasMouseMove(event: MouseEvent) {
@@ -134,6 +137,9 @@
       } else if (selectedTool === "eraser") {
         map.remove($activeLayerIndex, position);
       }
+    }
+    if (!GLOBAL_SHOW_ANIMATIONS) {
+      redrawCanvas();
     }
   }
 
@@ -156,5 +162,8 @@
       }
     }
     mouseDownPosition = null;
+    if (!GLOBAL_SHOW_ANIMATIONS) {
+      redrawCanvas();
+    }
   }
 </script>
