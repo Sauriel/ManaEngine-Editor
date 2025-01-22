@@ -29,7 +29,7 @@
   import { drawCheckerBg } from "$lib/utils/canvas/checkerBg";
   import type { Tool } from "$lib/utils/map/types";
   import { onDestroy, onMount } from "svelte";
-  import { gameloop } from "$lib/stores/gameloop";
+  import GameLoop from "$lib/stores/gameloop";
   import selectedTiles from "$lib/stores/selectedTilesStore";
   import type { MousePosition } from "$lib/utils/canvas/types";
   import tilemapStore from "$lib/stores/tilemapStore";
@@ -52,17 +52,17 @@
   const height = $derived<number>($map.height * tileSize);
 
   onMount(() => {
-    gameloop.addLoopParticipant({
-      id: GL_ID,
-      render: redrawCanvas,
-      update: tilemapStore.gameloopUpdate,
-    });
+    GameLoop.addDraw(GL_ID, redrawCanvas);
+    GameLoop.addUpdate(GL_ID, tilemapStore.gameloopUpdate);
     if (!GLOBAL_SHOW_ANIMATIONS) {
       redrawCanvas();
     }
   });
 
-  onDestroy(() => gameloop.removeLoopParticipant(GL_ID));
+  onDestroy(() => {
+    GameLoop.removeDraw(GL_ID);
+    GameLoop.removeUpdate(GL_ID);
+  });
 
   function redrawCanvas() {
     if (canvas) {

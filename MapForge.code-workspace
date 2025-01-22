@@ -6,6 +6,7 @@
   ],
   "settings": {
     "svelte.enable-ts-plugin": true,
-    "cSpell.words": ["gameloop"]
+    "cSpell.words": ["gameloop"],
+    "bun.runtime": "/home/sauriel/.local/share/mise/shims/bun"
   }
 }

@@ -19,7 +19,7 @@
 </style>
 
 <script lang="ts">
-  import { gameloop } from "$lib/stores/gameloop";
+  import GameLoop from "$lib/stores/gameloop";
   import selectedTiles from "$lib/stores/selectedTilesStore";
   import { drawCheckerBg } from "$lib/utils/canvas/checkerBg";
   import type { TileRendererConfig } from "$lib/utils/canvas/rpgmaker/types";
@@ -53,12 +53,7 @@
   );
 
   onMount(() => {
-    gameloop.addLoopParticipant({
-      id: GL_ID,
-      render: redrawCanvas,
-      // the update is done by the MapEditorMap.
-      // The Renderer are single instances and will update faster if you run it more often
-    });
+    GameLoop.addDraw(GL_ID, redrawCanvas);
     if (!GLOBAL_SHOW_ANIMATIONS) {
       redrawCanvas();
     }
@@ -76,7 +71,7 @@
   });
 
   onDestroy(() => {
-    gameloop.removeLoopParticipant(GL_ID);
+    GameLoop.removeDraw(GL_ID);
     unsubscribe();
   });
 

@@ -13,12 +13,12 @@
 </style>
 
 <script lang="ts">
-  import { gameloop } from "$lib/stores/gameloop";
+  import GameLoop from "$lib/stores/gameloop";
   import { GLOBAL_SHOW_ANIMATIONS } from "$lib/utils/constants";
   import MapEditorMap from "./MapEditorMap.svelte";
   import MapEditorSidebar from "./MapEditorSidebar.svelte";
 
   if (GLOBAL_SHOW_ANIMATIONS) {
-    gameloop.start();
+    GameLoop.start();
   }
 </script>
