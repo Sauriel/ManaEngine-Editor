@@ -57,7 +57,6 @@
     align-items: center;
     background-color: var(--color-back--darker);
     padding: 0.25em 0.5em;
-    cursor: pointer;
     transition:
       background 0.4s ease-in-out,
       border 0.4s ease-in-out;
@@ -127,7 +126,6 @@
     justify-content: center;
     align-items: center;
     margin-left: 1rem;
-    cursor: pointer;
     transition: background 0.4s ease-in-out;
   }
 

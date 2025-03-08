@@ -12,7 +12,6 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
     transition:
       background 0.4s ease-in-out,
       color 0.4s ease-in-out;

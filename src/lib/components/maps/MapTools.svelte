@@ -104,7 +104,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     width: 100%;
     aspect-ratio: 1;
   }

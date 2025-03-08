@@ -1,11 +1,11 @@
 <aside>
   <MapEditorTilemapGroups />
-  <div style="height: 200px"></div>
+  <MapEditorLayers />
 </aside>
 
 <style>
   aside {
-    --layers-height: 200px;
+    --layers-height: 25vh;
     display: grid;
     grid-template-areas:
       "tilemap"
@@ -18,4 +18,5 @@
 
 <script lang="ts">
   import MapEditorTilemapGroups from "./MapEditorTilemapGroups.svelte";
+  import MapEditorLayers from "./MapEditorLayers.svelte";
 </script>

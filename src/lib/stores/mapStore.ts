@@ -22,6 +22,22 @@ function createLayer() {
   });
 }
 
+function removeLayer(index: number) {
+  mapStore.update((state) => {
+    const map = cloneDeep(state);
+    map.layers.splice(index, 1);
+    return map;
+  });
+}
+
+function renameLayer(index: number, name: string) {
+  mapStore.update((state) => {
+    const map = cloneDeep(state);
+    map.layers[index].label = name;
+    return map;
+  });
+}
+
 function draw(layer: number, position: MousePosition, tiles: string[]) {
   mapStore.update((state) => {
     const map = cloneDeep(state);
@@ -145,6 +161,8 @@ const map = {
   update: mapStore.update,
   set: mapStore.set,
   createLayer,
+  removeLayer,
+  renameLayer,
   draw,
   remove,
   getTile,

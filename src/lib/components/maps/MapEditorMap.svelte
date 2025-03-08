@@ -11,7 +11,6 @@
     onmousemove={onCanvasMouseMove}
     onmouseup={onCanvasMouseUp}
   ></canvas>
-  <MapEditorLayers />
 </div>
 
 <style>
@@ -34,7 +33,6 @@
   import type { MousePosition } from "$lib/utils/canvas/types";
   import tilemapStore from "$lib/stores/tilemapStore";
   import activeLayerIndex from "$lib/stores/layerStore";
-  import MapEditorLayers from "./MapEditorLayers.svelte";
   import {
     GLOBAL_SHOW_ANIMATIONS,
     GLOBAL_SHOW_OUT_OF_BOUNDS_MAPAREA,

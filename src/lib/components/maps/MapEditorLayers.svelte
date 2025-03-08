@@ -1,55 +1,49 @@
-<Portal>
-  <section use:movable={{ handle: "header" }}>
-    <header><Icon icon="pajamas:drag" /> Layers</header>
-    <ul>
-      {#each layers as layer, index (index)}
-        <li class:active={index === $activeLayerIndex}>
-          <button onclick={() => activeLayerIndex.set(index)}>
-            <span class="move-handle">
-              <Icon icon="pajamas:drag-vertical" />
-            </span>
-            {layer.label}
-          </button>
-          <button class="delete-btn">
+<section>
+  <header>Layers</header>
+  <ul>
+    {#each orderedLayers as layer (layer.order)}
+      <li class:active={layer.order === $activeLayerIndex}>
+        <button
+          type="button"
+          class="layer-select"
+          onclick={() => activeLayerIndex.set(layer.order)}
+          ondblclick={() => renameLayer(layer.order)}
+        >
+          <span class="move-handle">
+            <Icon icon="pajamas:drag-vertical" />
+          </span>
+          {layer.label}
+        </button>
+        {#if orderedLayers.length > 1}
+          <button
+            type="button"
+            class="delete-btn"
+            onclick={() => removeLayer(layer.order)}
+          >
             <Icon icon="pajamas:remove" />
           </button>
-        </li>
-      {/each}
-      <li class="actions">
-        <button onclick={addLayer}>
-          <Icon icon="fa-solid:plus" />
-        </button>
+        {/if}
       </li>
-    </ul>
-  </section>
-</Portal>
+    {/each}
+    <li class="actions">
+      <button type="button" onclick={addLayer}>
+        <Icon icon="fa-solid:plus" />
+        Add new Layer
+      </button>
+    </li>
+  </ul>
+</section>
 
 <style>
-  section {
-    position: absolute;
-    top: 10rem;
-    left: 10rem;
-    background-color: color-mix(in srgb, var(--color-back), transparent 25%);
-    border: 1px solid var(--color-back--lighter);
-    border-radius: 8px;
-    overflow: hidden;
-    opacity: 0.2;
-    transition: opacity var(--transition);
-  }
-
-  section:hover {
-    opacity: 1;
-  }
-
   header {
-    background-color: color-mix(in srgb, var(--color-back), transparent 25%);
+    background-color: var(--color-back--lighter);
     padding: 0.25em 0.5em;
     border-bottom: 1px solid var(--color-front--darker);
     display: flex;
     align-items: center;
-    gap: 1ch;
-    cursor: move;
-    user-select: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
   }
 
   ul {
@@ -65,12 +59,12 @@
     transition: all var(--transition);
     display: flex;
     align-items: center;
-    justify-content: center;
     overflow: hidden;
   }
 
   li.active {
     color: var(--color-front--lighter);
+    background-color: var(--color-primary);
   }
 
   li:hover {
@@ -97,8 +91,11 @@
     justify-content: flex-start;
     gap: 1ch;
     padding: 0.25em 1em 0.25em 0.5em;
-    cursor: pointer;
     height: 100%;
+  }
+
+  .layer-select {
+    flex: 1 0 auto;
   }
 
   .move-handle {
@@ -109,6 +106,7 @@
   }
 
   .delete-btn {
+    flex: 0 0 auto;
     opacity: 0;
     transition: opacity var(--transition);
     color: var(--color-primary);
@@ -120,12 +118,28 @@
   import map from "$lib/stores/mapStore";
   import type { ForgeMapLayer } from "$lib/utils/map/types";
   import activeLayerIndex from "$lib/stores/layerStore";
-  import { movable } from "$lib/actions/movable";
-  import Portal from "../utils/Portal.svelte";
+
+  type OrderedLayer = Pick<ForgeMapLayer, "label"> & { order: number };
 
   const layers = $derived<ForgeMapLayer[]>($map.layers);
+  const orderedLayers = $derived<OrderedLayer[]>(
+    layers
+      .map((layer, index) => ({ label: layer.label, order: index }))
+      .toReversed()
+  );
 
   function addLayer() {
     map.createLayer();
+  }
+
+  function removeLayer(index: number) {
+    map.removeLayer(index);
+  }
+
+  function renameLayer(index: number) {
+    const newLabel = prompt("Enter new layer name");
+    if (newLabel) {
+      map.renameLayer(index, newLabel);
+    }
   }
 </script>

@@ -30,7 +30,6 @@
     border: 4px dashed var(--color-front);
     border-radius: 1vw;
     padding: 0.2em;
-    cursor: pointer;
     transition: background 0.4s ease-in-out;
   }
 
