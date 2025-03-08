@@ -149,7 +149,7 @@
     type ImportedTilemap,
     type TileMapType,
   } from "./types";
-  import { drawCheckerBg } from "$lib/utils/canvas/checkerBg";
+  import { drawCheckerBg } from "$lib/utils/canvas/tileDrawHelper";
   import { TILEMAP_TYPES } from "$lib/utils/canvas/rpgmaker/types";
   import { GLOBAL_TILE_BASE_SIZE } from "$lib/utils/constants";
 

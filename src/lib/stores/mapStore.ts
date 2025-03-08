@@ -1,4 +1,5 @@
-import type { MousePosition } from "$lib/utils/canvas/types";
+import type { AutoTileConfig } from "$lib/utils/canvas/rpgmaker/types";
+import type { Position } from "$lib/utils/canvas/types";
 import createAutoTileConfig from "$lib/utils/map/createAutoTileConfig";
 import createMap, {
   createLayer as createMapLayer,
@@ -38,7 +39,7 @@ function renameLayer(index: number, name: string) {
   });
 }
 
-function draw(layer: number, position: MousePosition, tiles: string[]) {
+function draw(layer: number, position: Position, tiles: string[]) {
   mapStore.update((state) => {
     const map = cloneDeep(state);
     map.layers[layer].tiles[position.y][position.x] = tiles[0];
@@ -46,7 +47,7 @@ function draw(layer: number, position: MousePosition, tiles: string[]) {
   });
 }
 
-function remove(layer: number, position: MousePosition) {
+function remove(layer: number, position: Position) {
   mapStore.update((state) => {
     const map = cloneDeep(state);
     map.layers[layer].tiles[position.y][position.x] = null;
@@ -54,13 +55,13 @@ function remove(layer: number, position: MousePosition) {
   });
 }
 
-function getTile(layer: number, position: MousePosition): TileName {
+function getTile(layer: number, position: Position): TileName {
   return get(mapStore).layers[layer].tiles[position.y][position.x];
 }
 
 function getTileWithConfig(
   layer: number,
-  position: MousePosition
+  position: Position
 ): TileWithConfig | null {
   const tiles = get(mapStore).layers[layer].tiles;
   const { x, y } = position;
@@ -68,24 +69,35 @@ function getTileWithConfig(
   if (!key) {
     return null;
   }
-  const context = createTileContext(tiles, x, y);
   return {
     key,
-    config: createAutoTileConfig(context),
+    config: createTileConfig(x, y, layer),
   };
+}
+
+function createTileConfig(
+  x: number,
+  y: number,
+  layer: number,
+  centerTile?: TileName
+): AutoTileConfig {
+  const tiles = get(mapStore).layers[layer].tiles;
+  const context = createTileContext(tiles, x, y, centerTile);
+  return createAutoTileConfig(context);
 }
 
 function createTileContext(
   tiles: TileName[][],
   x: number,
-  y: number
+  y: number,
+  centerTile?: TileName
 ): TileWithNeighbors {
   return {
     topLeft: getTileKey(tiles, x - 1, y - 1),
     top: getTileKey(tiles, x, y - 1),
     topRight: getTileKey(tiles, x + 1, y - 1),
     left: getTileKey(tiles, x - 1, y),
-    center: getTileKey(tiles, x, y),
+    center: centerTile ?? getTileKey(tiles, x, y),
     right: getTileKey(tiles, x + 1, y),
     bottomLeft: getTileKey(tiles, x - 1, y + 1),
     bottom: getTileKey(tiles, x, y + 1),
@@ -100,7 +112,7 @@ function getTileKey(tiles: TileName[][], x: number, y: number): TileName {
   return null;
 }
 
-function fill(layer: number, position: MousePosition, tiles: string[]) {
+function fill(layer: number, position: Position, tiles: string[]) {
   mapStore.update((state) => {
     const map = cloneDeep(state);
     const currentTile = getTileKey(
@@ -167,6 +179,7 @@ const map = {
   remove,
   getTile,
   getTileWithConfig,
+  createTileConfig,
   fill,
   printDebug,
 };

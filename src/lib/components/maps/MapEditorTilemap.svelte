@@ -21,9 +21,13 @@
 <script lang="ts">
   import GameLoop from "$lib/stores/gameloop";
   import selectedTiles from "$lib/stores/selectedTilesStore";
-  import { drawCheckerBg } from "$lib/utils/canvas/checkerBg";
+  import {
+    drawCheckerBg,
+    drawGrid,
+    drawSelection,
+  } from "$lib/utils/canvas/tileDrawHelper";
   import type { TileRendererConfig } from "$lib/utils/canvas/rpgmaker/types";
-  import { type MousePosition } from "$lib/utils/canvas/types";
+  import { type Position } from "$lib/utils/canvas/types";
   import {
     GLOBAL_SHOW_ANIMATIONS,
     GLOBAL_TILE_BASE_SIZE,
@@ -45,7 +49,7 @@
 
   const tileSize = $state<number>(GLOBAL_TILE_BASE_SIZE);
   const tilemapWidth = $state<number>(8);
-  let mouseDownPosition = $state<MousePosition | null>(null);
+  let mouseDownPosition = $state<Position | null>(null);
 
   const width = $derived<number>(tilemapWidth * tileSize);
   const height = $derived<number>(
@@ -83,32 +87,15 @@
       for (let y = 0; y < height; y += tileSize) {
         for (let x = 0; x < width; x += tileSize) {
           drawCheckerBg(ctx, tileSize, x, y);
+          drawGrid(ctx, tileSize, x, y);
 
           if (tilemaps.length > 0 && tilemapIndex < tilemaps.length) {
             const tile = tilemaps[tilemapIndex++];
             tile.renderer.drawPreview(ctx, x, y);
+            drawGrid(ctx, tileSize, x, y, 0.1);
 
             if (selectedTiles.includes(tile.key)) {
-              ctx.fillStyle = getComputedStyle(document.body).getPropertyValue(
-                "--color-front"
-              );
-              ctx.globalAlpha = 0.2;
-              ctx.fillRect(x, y, tileSize, tileSize);
-              ctx.globalAlpha = 1;
-              ctx.fillRect(x, y, tileSize, activeBorderWidth);
-              ctx.fillRect(
-                x,
-                y + (tileSize - activeBorderWidth),
-                tileSize,
-                activeBorderWidth
-              );
-              ctx.fillRect(x, y, activeBorderWidth, tileSize);
-              ctx.fillRect(
-                x + (tileSize - activeBorderWidth),
-                y,
-                activeBorderWidth,
-                tileSize
-              );
+              drawSelection(ctx, tileSize, x, y);
             }
           }
         }
@@ -116,23 +103,20 @@
     }
   }
 
-  function getPosition(event: MouseEvent): MousePosition {
+  function getPosition(event: MouseEvent): Position {
     return {
       x: Math.floor(event.offsetX / tileSize),
       y: Math.floor(event.offsetY / tileSize),
     };
   }
 
-  function findTile(position: MousePosition): TileRendererConfig | null {
+  function findTile(position: Position): TileRendererConfig | null {
     const index = position.y * tilemapWidth + position.x;
     return index < tilemaps.length ? tilemaps[index] : null;
   }
 
-  function getAllPointsInArea(
-    start: MousePosition,
-    end: MousePosition
-  ): MousePosition[] {
-    const points: MousePosition[] = [];
+  function getAllPointsInArea(start: Position, end: Position): Position[] {
+    const points: Position[] = [];
 
     const minX = Math.min(start.x, end.x);
     const maxX = Math.max(start.x, end.x);
@@ -148,7 +132,7 @@
     return points;
   }
 
-  function selectTiles(position: MousePosition) {
+  function selectTiles(position: Position) {
     selectedTiles.set([]);
     getAllPointsInArea(mouseDownPosition!, position)
       .map(findTile)

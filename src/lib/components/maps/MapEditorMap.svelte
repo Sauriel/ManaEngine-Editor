@@ -25,12 +25,12 @@
 <script lang="ts">
   import MapTools from "./MapTools.svelte";
   import map from "$lib/stores/mapStore";
-  import { drawCheckerBg } from "$lib/utils/canvas/checkerBg";
+  import { drawCheckerBg, drawGrid } from "$lib/utils/canvas/tileDrawHelper";
   import type { Tool } from "$lib/utils/map/types";
   import { onDestroy, onMount } from "svelte";
   import GameLoop from "$lib/stores/gameloop";
   import selectedTiles from "$lib/stores/selectedTilesStore";
-  import type { MousePosition } from "$lib/utils/canvas/types";
+  import type { Position } from "$lib/utils/canvas/types";
   import tilemapStore from "$lib/stores/tilemapStore";
   import activeLayerIndex from "$lib/stores/layerStore";
   import {
@@ -44,7 +44,8 @@
 
   const tileSize = $state<number>(GLOBAL_TILE_BASE_SIZE);
   let selectedTool = $state<Tool>("brush");
-  let mouseDownPosition = $state<MousePosition | null>(null);
+  let mouseDownPosition = $state<Position | null>(null);
+  let mouseOverPosition = $state<Position | null>(null);
 
   const width = $derived<number>($map.width * tileSize);
   const height = $derived<number>($map.height * tileSize);
@@ -68,17 +69,24 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (let y = 0; y < height; y += tileSize) {
         for (let x = 0; x < width; x += tileSize) {
+          const position = toGridPosition(x, y);
           drawCheckerBg(ctx, tileSize, x, y);
+          drawGrid(ctx, tileSize, x, y);
           for (let layer = 0; layer < $map.layers.length; layer++) {
-            const twc = map.getTileWithConfig(layer, toMousePosition(x, y));
+            const twc = map.getTileWithConfig(layer, position);
             if (twc) {
               const tile = tilemapStore.find(twc.key);
               if (tile) {
                 tile.renderer.draw(ctx, x, y, twc.config);
+                drawGrid(ctx, tileSize, x, y, 0.1);
               }
             }
           }
         }
+      }
+
+      if (mouseOverPosition) {
+        drawPreview(ctx, mouseOverPosition);
       }
       // draw bounds
       const outOfBoundsColor = getComputedStyle(document.body).getPropertyValue(
@@ -97,11 +105,27 @@
     }
   }
 
-  function getPosition(event: MouseEvent): MousePosition {
-    return toMousePosition(event.offsetX, event.offsetY);
+  function drawPreview(
+    context: CanvasRenderingContext2D,
+    centerPosition: Position
+  ) {
+    const tiles = selectedTiles.get();
+    if (tiles.length > 0) {
+      const tile = tilemapStore.find(tiles[0]);
+      if (tile) {
+        const x = centerPosition.x;
+        const y = centerPosition.y;
+        const config = map.createTileConfig(x, y, $activeLayerIndex, tile.key);
+        tile.renderer.draw(context, x * tileSize, y * tileSize, config);
+      }
+    }
   }
 
-  function toMousePosition(x: number, y: number): MousePosition {
+  function getPosition(event: MouseEvent): Position {
+    return toGridPosition(event.offsetX, event.offsetY);
+  }
+
+  function toGridPosition(x: number, y: number): Position {
     return {
       x: Math.floor(x / tileSize),
       y: Math.floor(y / tileSize),
@@ -111,6 +135,7 @@
   function onCanvasMouseDown(event: MouseEvent) {
     const position = getPosition(event);
     mouseDownPosition = position;
+    mouseOverPosition = null;
     if (selectedTool === "brush") {
       const tiles = selectedTiles.get();
       if (tiles.length > 0) {
@@ -125,8 +150,8 @@
   }
 
   function onCanvasMouseMove(event: MouseEvent) {
+    const position = getPosition(event);
     if (mouseDownPosition) {
-      const position = getPosition(event);
       if (selectedTool === "brush") {
         const tiles = selectedTiles.get();
         if (tiles.length > 0) {
@@ -135,6 +160,8 @@
       } else if (selectedTool === "eraser") {
         map.remove($activeLayerIndex, position);
       }
+    } else {
+      mouseOverPosition = position;
     }
     if (!GLOBAL_SHOW_ANIMATIONS) {
       redrawCanvas();
