@@ -10,6 +10,7 @@
     onmousedown={onCanvasMouseDown}
     onmousemove={onCanvasMouseMove}
     onmouseup={onCanvasMouseUp}
+    onmouseleave={onCanvasMouseLeave}
   ></canvas>
 </div>
 
@@ -191,6 +192,13 @@
       }
     }
     mouseDownPosition = null;
+    if (!GLOBAL_SHOW_ANIMATIONS) {
+      redrawCanvas();
+    }
+  }
+
+  function onCanvasMouseLeave() {
+    mouseOverPosition = null;
     if (!GLOBAL_SHOW_ANIMATIONS) {
       redrawCanvas();
     }
