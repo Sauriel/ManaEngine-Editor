@@ -9,6 +9,7 @@ import type {
   TileName,
   TileWithConfig,
   TileWithNeighbors,
+  TilePreview,
 } from "$lib/utils/map/types";
 import { cloneDeep } from "lodash";
 import { get, writable } from "svelte/store";
@@ -61,17 +62,23 @@ function getTile(layer: number, position: Position): TileName {
 
 function getTileWithConfig(
   layer: number,
-  position: Position
+  position: Position,
+  preview?: TilePreview
 ): TileWithConfig | null {
   const tiles = get(mapStore).layers[layer].tiles;
   const { x, y } = position;
-  const key = tiles[y][x];
+  let key;
+  if (preview?.x === x && preview?.y === y) {
+    key = preview.key;
+  } else {
+    key = tiles[y][x];
+  }
   if (!key) {
     return null;
   }
   return {
     key,
-    config: createTileConfig(x, y, layer),
+    config: createTileConfig(x, y, layer, preview),
   };
 }
 
@@ -79,10 +86,10 @@ function createTileConfig(
   x: number,
   y: number,
   layer: number,
-  centerTile?: TileName
+  preview?: TilePreview
 ): AutoTileConfig {
   const tiles = get(mapStore).layers[layer].tiles;
-  const context = createTileContext(tiles, x, y, centerTile);
+  const context = createTileContext(tiles, x, y, preview);
   return createAutoTileConfig(context);
 }
 
@@ -90,26 +97,34 @@ function createTileContext(
   tiles: TileName[][],
   x: number,
   y: number,
-  centerTile?: TileName
+  preview?: TilePreview
 ): TileWithNeighbors {
   return {
-    topLeft: getTileKey(tiles, x - 1, y - 1),
-    top: getTileKey(tiles, x, y - 1),
-    topRight: getTileKey(tiles, x + 1, y - 1),
-    left: getTileKey(tiles, x - 1, y),
-    center: centerTile ?? getTileKey(tiles, x, y),
-    right: getTileKey(tiles, x + 1, y),
-    bottomLeft: getTileKey(tiles, x - 1, y + 1),
-    bottom: getTileKey(tiles, x, y + 1),
-    bottomRight: getTileKey(tiles, x + 1, y + 1),
+    topLeft: getTileKey(tiles, x - 1, y - 1, preview),
+    top: getTileKey(tiles, x, y - 1, preview),
+    topRight: getTileKey(tiles, x + 1, y - 1, preview),
+    left: getTileKey(tiles, x - 1, y, preview),
+    center: getTileKey(tiles, x, y, preview),
+    right: getTileKey(tiles, x + 1, y, preview),
+    bottomLeft: getTileKey(tiles, x - 1, y + 1, preview),
+    bottom: getTileKey(tiles, x, y + 1, preview),
+    bottomRight: getTileKey(tiles, x + 1, y + 1, preview),
   };
 }
 
-function getTileKey(tiles: TileName[][], x: number, y: number): TileName {
-  if (y >= 0 && x >= 0 && y < tiles.length && x < tiles[y].length) {
+function getTileKey(
+  tiles: TileName[][],
+  x: number,
+  y: number,
+  preview?: TilePreview
+): TileName {
+  if (preview?.x === x && preview?.y === y) {
+    return preview.key;
+  } else if (y >= 0 && x >= 0 && y < tiles.length && x < tiles[y].length) {
     return tiles[y][x];
+  } else {
+    return null;
   }
-  return null;
 }
 
 function fill(layer: number, position: Position, tiles: string[]) {

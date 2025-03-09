@@ -15,6 +15,7 @@ import {
   persistTileSources,
   loadPersistTileSources,
 } from "$lib/utils/persitence/persistTileSource";
+import type { TileName } from "$lib/utils/map/types";
 
 function sourceSort(a: TileSource, b: TileSource): number {
   if (a.type < b.type) {
@@ -120,7 +121,7 @@ const tilemapStore = {
     get(tilemaps)
       .flatMap((tm) => tm.configs)
       .forEach((conf) => conf.renderer.update(deltaTime)),
-  find: (key: string) =>
+  find: (key: TileName) =>
     get(tilemaps)
       .flatMap((tm) => tm.configs)
       .find((tile) => tile.key === key),

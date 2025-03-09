@@ -1,3 +1,4 @@
+import type { TileName } from "$lib/utils/map/types";
 import type TileRenderer from "./TileRenderer";
 
 export type XPos = number;
@@ -43,7 +44,7 @@ export type TileRendererConfigGroup = {
 };
 
 export type TileRendererConfig = {
-  key: string;
+  key: TileName;
   auto: boolean;
   type: TileType;
   position: number;

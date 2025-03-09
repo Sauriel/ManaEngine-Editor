@@ -26,7 +26,7 @@
   import MapTools from "./MapTools.svelte";
   import map from "$lib/stores/mapStore";
   import { drawCheckerBg, drawGrid } from "$lib/utils/canvas/tileDrawHelper";
-  import type { Tool } from "$lib/utils/map/types";
+  import type { TilePreview, Tool } from "$lib/utils/map/types";
   import { onDestroy, onMount } from "svelte";
   import GameLoop from "$lib/stores/gameloop";
   import selectedTiles from "$lib/stores/selectedTilesStore";
@@ -63,6 +63,25 @@
     GameLoop.removeUpdate(GL_ID);
   });
 
+  function getPreview(layer: number): TilePreview | undefined {
+    if (!mouseOverPosition || $activeLayerIndex !== layer) {
+      return undefined;
+    }
+    const tiles = selectedTiles.get();
+    if (tiles.length == 0) {
+      return undefined;
+    }
+    const tile = tilemapStore.find(tiles[0]);
+    if (!tile) {
+      return undefined;
+    }
+    return {
+      x: mouseOverPosition.x,
+      y: mouseOverPosition.y,
+      key: tile.key,
+    };
+  }
+
   function redrawCanvas() {
     if (canvas) {
       const ctx = canvas.getContext("2d")!;
@@ -73,7 +92,11 @@
           drawCheckerBg(ctx, tileSize, x, y);
           drawGrid(ctx, tileSize, x, y);
           for (let layer = 0; layer < $map.layers.length; layer++) {
-            const twc = map.getTileWithConfig(layer, position);
+            const twc = map.getTileWithConfig(
+              layer,
+              position,
+              getPreview(layer)
+            );
             if (twc) {
               const tile = tilemapStore.find(twc.key);
               if (tile) {
@@ -85,9 +108,6 @@
         }
       }
 
-      if (mouseOverPosition) {
-        drawPreview(ctx, mouseOverPosition);
-      }
       // draw bounds
       const outOfBoundsColor = getComputedStyle(document.body).getPropertyValue(
         "--color-back"
@@ -102,22 +122,6 @@
         height - tileSize
       );
       ctx.globalAlpha = 1;
-    }
-  }
-
-  function drawPreview(
-    context: CanvasRenderingContext2D,
-    centerPosition: Position
-  ) {
-    const tiles = selectedTiles.get();
-    if (tiles.length > 0) {
-      const tile = tilemapStore.find(tiles[0]);
-      if (tile) {
-        const x = centerPosition.x;
-        const y = centerPosition.y;
-        const config = map.createTileConfig(x, y, $activeLayerIndex, tile.key);
-        tile.renderer.draw(context, x * tileSize, y * tileSize, config);
-      }
     }
   }
 

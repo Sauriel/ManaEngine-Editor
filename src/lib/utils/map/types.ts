@@ -24,7 +24,7 @@ export type Tool =
   | "eraser";
 
 export type TileWithConfig = {
-  key: string;
+  key: TileName;
   config: AutoTileConfig;
 };
 
@@ -38,4 +38,10 @@ export type TileWithNeighbors = {
   bottomLeft: TileName;
   bottom: TileName;
   bottomRight: TileName;
+};
+
+export type TilePreview = {
+  x: number;
+  y: number;
+  key: TileName;
 };
