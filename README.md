@@ -1,6 +1,6 @@
-# MapForge
+# ManaEngine Editor
 
-MapForge is a cutting-edge, open-source game engine and editor designed to empower creators to build stunning 2D RPGs. Inspired by tools like RPG Maker, MapForge combines modern web technologies with an intuitive interface to make game development fast, fun, and accessible.
+ManaEngine is a cutting-edge, open-source game engine and editor designed to empower creators to build stunning 2D RPGs. Inspired by tools like RPG Maker, ManaEngine Editor combines modern web technologies with an intuitive interface to make game development fast, fun, and accessible.
 
 ---
 
@@ -9,14 +9,14 @@ MapForge is a cutting-edge, open-source game engine and editor designed to empow
 - **Game Engine and Editor**: Create, edit, and export 2D RPGs with ease.
 - **RPG Maker MZ Compatibility**: Fully supports RPG Maker MZ tilesets.
 - **Web Technology Stack**: Built with Svelte, TypeScript, and HTML Canvas.
-- **Cross-Platform**: Thanks to Tauri, MapForge runs seamlessly on Windows, macOS, and Linux.
+- **Cross-Platform**: Thanks to Tauri, ManaEngine runs seamlessly on Windows, macOS, and Linux.
 - **Lightweight and Fast**: Developed with modern tools like Bun for rapid development and blazing-fast performance.
 
 ---
 
 ## Getting Started
 
-Follow these steps to clone, install, and run MapForge locally.
+Follow these steps to clone, install, and run ManaEngine Editor locally.
 
 ### Prerequisites
 
@@ -26,8 +26,8 @@ Follow these steps to clone, install, and run MapForge locally.
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Sauriel/MapForge.git
-   cd MapForge
+   git clone https://github.com/Sauriel/ManaEngine-Editor.git
+   cd ManaEngine-Editor
    ```
 2. Install dependencies:
    ```bash
@@ -46,6 +46,7 @@ This will launch the app in your default browser. Changes to the code will hot-r
 
 ## Roadmap
 
+- [ ] Switch to [Konva](https://konvajs.org/) for tha canvas.
 - [ ] Implement event-based scripting.
 - [ ] Expand support for additional RPG Maker tilesets.
 - [ ] Add sprite and animation editors.
@@ -69,7 +70,7 @@ Contributions are welcome! To get started:
 
 ## License
 
-MapForge is licensed under the [GNU GENERAL PUBLIC LICENSE](./LICENSE). Feel free to use it, modify it, and distribute it as you see fit.
+ManaEngine is licensed under the [GNU GENERAL PUBLIC LICENSE](./LICENSE). Feel free to use it, modify it, and distribute it as you see fit.
 
 ---
 
@@ -81,7 +82,7 @@ MapForge is licensed under the [GNU GENERAL PUBLIC LICENSE](./LICENSE). Feel fre
 
 ## Acknowledgements
 
-MapForge is inspired by RPG Maker and other incredible game development tools. Special thanks to the developers behind Svelte, Tauri, and the Bun runtime for making this project possible.
+ManaEngine is inspired by RPG Maker and other incredible game development tools. Special thanks to the developers behind Svelte, Tauri, and the Bun runtime for making this project possible.
 
 ---
 
