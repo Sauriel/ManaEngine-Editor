@@ -1,6 +1,6 @@
-# ManaEngine Editor
+# ManaForge, the ManaEngine Editor
 
-ManaEngine is a cutting-edge, open-source game engine and editor designed to empower creators to build stunning 2D RPGs. Inspired by tools like RPG Maker, ManaEngine Editor combines modern web technologies with an intuitive interface to make game development fast, fun, and accessible.
+ManaEngine is a cutting-edge, open-source game engine and editor designed to empower creators to build stunning 2D RPGs. Inspired by tools like RPG Maker, ManaForge, the ManaEngine Editor, combines modern web technologies with an intuitive interface to make game development fast, fun, and accessible.
 
 ---
 
@@ -16,7 +16,7 @@ ManaEngine is a cutting-edge, open-source game engine and editor designed to emp
 
 ## Getting Started
 
-Follow these steps to clone, install, and run ManaEngine Editor locally.
+Follow these steps to clone, install, and run ManaForge locally.
 
 ### Prerequisites
 
@@ -37,9 +37,11 @@ Follow these steps to clone, install, and run ManaEngine Editor locally.
 ### Running the Development Server
 
 To start the development server:
+
 ```bash
 bun run dev
 ```
+
 This will launch the app in your default browser. Changes to the code will hot-reload automatically.
 
 ---
@@ -82,7 +84,7 @@ ManaEngine is licensed under the [GNU GENERAL PUBLIC LICENSE](./LICENSE). Feel f
 
 ## Acknowledgements
 
-ManaEngine is inspired by RPG Maker and other incredible game development tools. Special thanks to the developers behind Svelte, Tauri, and the Bun runtime for making this project possible.
+ManaEngine and ManaForge are inspired by RPG Maker and other incredible game development tools. Special thanks to the developers behind Svelte, Tauri, and the Bun runtime for making this project possible.
 
 ---
 
